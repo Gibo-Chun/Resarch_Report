@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大语言模型可解释性及其在蛋白质语言模型中的应用</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/blood.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        
+        .reveal {
+            background: var(--bg-gradient);
+            color: #ecf0f1;
+        }
+        
+        .reveal h1 { 
+            font-size: 2em; 
+            color: #3498db;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+        }
+        
+        .reveal h2 { 
+            font-size: 1.6em; 
+            color: #2ecc71;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        
+        .reveal h3 { 
+            font-size: 1.2em; 
+            color: #f39c12;
+        }
+        
+        .reveal p { 
+            font-size: 0.95em; 
+            line-height: 1.8;
+            color: #ecf0f1;
+        }
+        
+        .reveal ul { 
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .reveal li { 
+            margin-bottom: 0.7em;
+            color: #bdc3c7;
+        }
+        
+        .reveal strong {
+            color: #3498db;
+        }
+        
+        .reveal a { 
+            color: #3498db;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        
+        .reveal a:hover {
+            color: #2ecc71;
+        }
+        
+        .reveal .highlight { 
+            background: #f39c12;
+            color: #1a1a2e;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .reveal .key-concept {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(46, 204, 113, 0.2));
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .reveal table { 
+            font-size: 0.75em;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .reveal th { 
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: #ecf0f1;
+            padding: 12px;
+            border: 2px solid #3498db;
+        }
+        
+        .reveal td { 
+            border: 1px solid #34495e;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .reveal tr:hover td {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        /* 讲稿样式 - 始终可见 */
+        .reveal .speaker-notes {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9), rgba(26, 26, 46, 0.95));
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 0.75em;
+            text-align: left;
+            border: 2px solid #3498db;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            line-height: 1.8;
+        }
+        
+        .reveal .speaker-notes strong {
+            color: #2ecc71;
+            font-size: 1.1em;
+        }
+        
+        .reveal .speaker-notes::before {
+            content: "📝 讲稿";
+            display: block;
+            margin-bottom: 10px;
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        /* 引用样式 */
+        .reveal .citation {
+            font-size: 0.65em;
+            color: #7f8c8d;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed #34495e;
+        }
+        
+        .reveal .citation a {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        /* 进度指示器 */
+        .progress-container {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            color: #ecf0f1;
+            z-index: 1000;
+        }
+        
+        /* 导航提示 */
+        .nav-hint {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            color: #bdc3c7;
+            z-index: 1000;
+        }
+        
+        /* 幻灯片编号 */
+        .slide-number {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(52, 152, 219, 0.8);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            color: white;
+            z-index: 1000;
+        }
+        
+        /* 代码块样式 */
+        .reveal pre {
+            background: rgba(0,0,0,0.5);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .reveal code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #2ecc71;
+        }
+        
+        /* 动画效果 */
+        .reveal .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 重点框 */
+        .reveal .important-box {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(243, 156, 18, 0.2));
+            border: 2px solid #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        /* 时间估计标签 */
+        .time-estimate {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-hint">
+        📱 导航：空格/→ 下一页 | ← 上一页 | F 全屏
+    </div>
+    
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- 第 1 页：标题页 -->
+            <section>
+                <div style="text-align: center;">
+                    <h1 style="border: none; font-size: 2.5em;">大语言模型可解释性<br>及其在蛋白质语言模型中的应用</h1>
+                    <h3 style="color: #2ecc71; margin-top: 30px;">从机制可解释性到生物学发现</h3>
+                    
+                    <div style="margin-top: 60px; padding: 30px; background: rgba(52, 152, 219, 0.1); border-radius: 15px; border: 2px solid #3498db;">
+                        <p style="font-size: 1.1em; margin: 10px 0;">
+                            <span style="color: #f39c12;">📅</span> <strong>日期</strong>: 2026 年 3 月
+                        </p>
+                        <p style="font-size: 1.1em; margin: 10px 0;">
+                            <span style="color: #f39c12;">⏱️</span> <strong>汇报时长</strong>: 60-120 分钟
+                        </p>
+                        <p style="font-size: 1.1em; margin: 10px 0;">
+                            <span style="color: #f39c12;">🎯</span> <strong>目标受众</strong>: 生物学湿实验背景研究人员
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 2 分钟）：</strong><br><br>
+                    各位同学好，欢迎来到今天的汇报。<br><br>
+                    我是今天的汇报人，接下来 60-120 分钟内，我将为大家介绍大语言模型可解释性领域的最新进展，以及这些方法如何被应用到蛋白质语言模型中，帮助我们理解生物学的深层机制。<br><br>
+                    这次汇报特别为湿实验背景的同学设计，我会尽量用生物学类比来解释技术概念，避免过多数学公式和代码。<br><br>
+                    汇报分为四个主要部分：首先介绍什么是可解释性，为什么它重要；然后讲解大语言模型可解释性的核心方法；接着展示这些方法在蛋白质模型中的应用；最后讨论对未来生物学研究的启示。<br><br>
+                    欢迎大家随时打断提问，我们每个部分结束后也会留出专门的讨论时间。
+                </div>
+            </section>
+
+            <!-- 第 2 页：目录 -->
+            <section>
+                <h2>📋 汇报大纲</h2>
+                
+                <div class="time-estimate">总时长：60-120 分钟</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #3498db;">
+                        <strong style="color: #3498db; font-size: 1.2em;">第一部分</strong><br>
+                        可解释性基础概念<br>
+                        <span style="color: #7f8c8d; font-size: 0.9em;">⏱️ 约 15 分钟</span>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #2ecc71;">
+                        <strong style="color: #2ecc71; font-size: 1.2em;">第二部分</strong><br>
+                        大语言模型可解释性方法<br>
+                        <span style="color: #7f8c8d; font-size: 0.9em;">⏱️ 约 30 分钟</span>
+                    </div>
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #f39c12;">
+                        <strong style="color: #f39c12; font-size: 1.2em;">第三部分</strong><br>
+                        操控与干预技术<br>
+                        <span style="color: #7f8c8d; font-size: 0.9em;">⏱️ 约 25 分钟</span>
+                    </div>
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                        <strong style="color: #e74c3c; font-size: 1.2em;">第四部分</strong><br>
+                        蛋白质语言模型的可解释性<br>
+                        <span style="color: #7f8c8d; font-size: 0.9em;">⏱️ 约 30 分钟</span>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(149, 165, 166, 0.15); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <strong style="color: #95a5a6;">第五部分 + 问答</strong>: 生物学应用与未来展望 (20 分钟) + 问答讨论 (15-30 分钟)
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 3 分钟）：</strong><br><br>
+                    这是今天汇报的整体结构。<br><br>
+                    <strong>第一部分</strong>会用生物学类比来解释什么是可解释性——就像我们不仅要知其然（模型能预测），还要知其所以然（模型如何预测）。这部分比较基础，节奏会快一些。<br><br>
+                    <strong>第二部分</strong>是核心技术讲解，包括稀疏自编码器、电路分析等方法。这是今天的技术重点，我会用图示帮助大家理解。<br><br>
+                    <strong>第三部分</strong>讲解如何"操控"模型行为。这部分会展示一些很酷的实验结果，比如如何让模型说真话、如何改变蛋白质的预测特性。<br><br>
+                    <strong>第四部分</strong>展示这些技术在蛋白质模型中的实际应用，包括 InterPLM、ESMFold 机制解析等最新工作。<br><br>
+                    <strong>第五部分</strong>讨论对湿实验研究的启示，包括如何开始使用这些工具、有哪些可用资源。<br><br>
+                    每个部分都会留出提问时间，欢迎大家随时打断。如果某个部分特别感兴趣，我们可以深入讨论。
+                </div>
+            </section>
+
+            <!-- 第 3 页：什么是可解释性 -->
+            <section>
+                <h2>🔍 什么是可解释性？</h2>
+                
+                <div class="key-concept">
+                    <strong>核心问题</strong>: 模型为什么做出这个预测？
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #e74c3c; margin-top: 0;">❌ 黑箱问题</h4>
+                        <p style="font-size: 0.85em;">深度学习模型像"黑箱"——输入→输出，但中间过程不透明</p>
+                        <div style="text-align: center; font-size: 2em; margin: 15px 0;">📦 ➡️ ❓ ➡️ 📤</div>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">✅ 可解释性目标</h4>
+                        <p style="font-size: 0.85em;">打开黑箱，理解内部计算机制</p>
+                        <div style="text-align: center; font-size: 2em; margin: 15px 0;">📦 ➡️ 🔍 ➡️ 📤</div>
+                    </div>
+                </div>
+                
+                <div class="important-box">
+                    <strong>🧬 生物学类比</strong>:
+                    <ul style="margin-top: 10px;">
+                        <li><strong>传统方法（BLAST）</strong>: 清晰的序列相似性分数 → "这个蛋白与已知蛋白 X 有 85% 相似性"</li>
+                        <li><strong>深度学习方法（ESM/AlphaFold）</strong>: 高精度但难以理解"为什么" → "这个蛋白会折叠成 X 结构"（但不知道模型基于什么特征判断）</li>
+                    </ul>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://arxiv.org/html/2407.11215v1" target="_blank">Mechanistic interpretability of large language models</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 5 分钟）：</strong><br><br>
+                    让我用一个生物学类比来解释可解释性。<br><br>
+                    假设你有一个预测蛋白质功能的工具。<br><br>
+                    <strong>传统工具如 BLAST</strong>，它会告诉你："这个序列和已知蛋白 X 有 85% 相似性"。这个解释很清晰——你知道预测基于序列相似性。如果结果错了，你知道可能是比对算法的问题，或者数据库里没有更好的匹配。<br><br>
+                    但像 <strong>ESMFold 这样的深度学习模型</strong>，它能给出更准确的预测，但你不知道它"看"到了什么特征。它可能捕捉到了：<br>
+                    - 进化保守性<br>
+                    - 结构约束<br>
+                    - 甚至是我们尚未发现的生物学规律<br><br>
+                    可解释性就是要回答：<br>
+                    - 模型内部哪些神经元被激活？<br>
+                    - 它们代表什么生物学概念？<br>
+                    - 这些信息如何流动并最终产生预测？<br><br>
+                    这就像从"这个药有效"进步到"这个药通过抑制 X 通路起作用"。后者让你能设计更好的实验、预测副作用、甚至改进药物设计。<br><br>
+                    对湿实验研究者，这种理解至关重要——因为你不能仅凭"模型说的"就设计昂贵实验。
+                </div>
+            </section>
+
+            <!-- 第 4 页：为什么需要可解释性 -->
+            <section>
+                <h2>❓ 为什么可解释性对生物学至关重要？</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 10px; border-top: 4px solid #3498db;">
+                        <h4 style="color: #3498db; margin-top: 0;">🔬 科学发现</h4>
+                        <p style="font-size: 0.85em;">从模型中发现新的生物学规律</p>
+                        <ul style="font-size: 0.8em;">
+                            <li>模型可能发现未知的结构 - 功能关系</li>
+                            <li>例：识别新的功能模体或结合位点模式</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px; border-top: 4px solid #2ecc71;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">✅ 信任与验证</h4>
+                        <p style="font-size: 0.85em;">湿实验验证需要可理解的假设</p>
+                        <ul style="font-size: 0.8em;">
+                            <li>不能仅凭"模型说的"就设计昂贵实验</li>
+                            <li>需要知道预测的依据才能决定是否验证</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 10px; border-top: 4px solid #f39c12;">
+                        <h4 style="color: #f39c12; margin-top: 0;">⚠️ 安全性</h4>
+                        <p style="font-size: 0.85em;">避免模型偏见导致错误结论</p>
+                        <ul style="font-size: 0.8em;">
+                            <li>训练数据偏差可能影响预测</li>
+                            <li>识别模型何时可能出错</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px; border-top: 4px solid #e74c3c;">
+                        <h4 style="color: #e74c3c; margin-top: 0;">📐 指导实验设计</h4>
+                        <p style="font-size: 0.85em;">理解模型决策边界</p>
+                        <ul style="font-size: 0.8em;">
+                            <li>知道模型在什么情况下可靠/不可靠</li>
+                            <li>优化突变体筛选策略</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://www.pnas.org/doi/10.1073/pnas.2406285121" target="_blank">Protein language models learn evolutionary statistics (PNAS 2024)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 5 分钟）：</strong><br><br>
+                    对于湿实验研究者，可解释性不是锦上添花，而是必需品。让我逐一解释：<br><br>
+                    <strong>第一，科学发现</strong>。如果模型能告诉我们它基于哪些特征做预测，我们可能发现新的生物学规律。比如，模型可能识别出一个从未被报道过的结构模体与功能的关联。这就像用基因组学发现新基因——模型成了假设生成引擎。<br><br>
+                    <strong>第二，信任与验证</strong>。设计一个点突变实验可能需要几周时间和大量试剂。如果模型说"突变这个位点会破坏功能"，你需要知道它为什么这么认为：<br>
+                    - 是基于进化保守性？<br>
+                    - 是基于结构考虑？<br>
+                    - 还是基于某种序列模式？<br>
+                    知道依据后，你才能决定是否值得做这个实验。<br><br>
+                    <strong>第三，安全性</strong>。模型训练数据可能有偏差——比如某些蛋白家族过度代表，或者某些功能注释质量不高。可解释性帮助我们识别这些偏差，避免被误导。<br><br>
+                    <strong>第四，指导实验</strong>。知道模型的决策边界，我们知道什么时候可以信任它，什么时候需要谨慎。比如，模型可能对激酶家族预测很准，但对膜蛋白就不太可靠。<br><br>
+                    总结：可解释性让你从"盲信模型"变成"明智地使用模型"。
+                </div>
+            </section>
+
+            <!-- 第 5 页：机制可解释性核心概念 -->
+            <section>
+                <h2>🧠 机制可解释性：核心概念</h2>
+                
+                <div class="key-concept">
+                    <strong>目标</strong>: 在神经元/电路层面理解模型如何计算
+                </div>
+                
+                <table style="width: 100%; margin: 20px 0;">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">概念</th>
+                            <th style="width: 40%;">定义</th>
+                            <th style="width: 40%;">生物学类比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>神经元</strong><br><span style="font-size: 0.8em; color: #7f8c8d;">Neuron</span></td>
+                            <td>模型的基本计算单元</td>
+                            <td>🧬 氨基酸残基</td>
+                        </tr>
+                        <tr>
+                            <td><strong>特征</strong><br><span style="font-size: 0.8em; color: #7f8c8d;">Feature</span></td>
+                            <td>神经元编码的概念（如"结合位点"、"疏水性"）</td>
+                            <td>🔬 功能域/模体</td>
+                        </tr>
+                        <tr>
+                            <td><strong>电路</strong><br><span style="font-size: 0.8em; color: #7f8c8d;">Circuit</span></td>
+                            <td>神经元之间的计算路径</td>
+                            <td>🔗 信号通路</td>
+                        </tr>
+                        <tr>
+                            <td><strong>叠加态</strong><br><span style="font-size: 0.8em; color: #7f8c8d;">Superposition</span></td>
+                            <td>多个特征共享同一神经元（关键挑战）</td>
+                            <td>🎭 一个氨基酸参与多个功能</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="important-box">
+                    <strong>💡 关键洞见</strong>: 由于模型需要编码的概念远多于神经元数量，多个特征可能共享同一神经元。这就像用一个氨基酸同时编码结构和功能信息——解耦很困难。
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://arxiv.org/html/2602.11180v1" target="_blank">Mechanistic Interpretability for LLM Alignment (2026)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    现在进入技术部分。机制可解释性有几个核心概念，我用表格中的生物学类比来解释。<br><br>
+                    <strong>神经元</strong>是模型的基本计算单元。在 Transformer 中，每个层有数千个神经元。类比生物学，可以想象成<strong>氨基酸残基</strong>——单个作用有限，但组合起来产生功能。<br><br>
+                    <strong>特征</strong>是神经元编码的概念。研究发现，某些神经元会被特定概念激活。比如，在语言模型中有个神经元专门对"金门大桥"相关文本响应。在蛋白质模型中，可能有神经元编码<strong>"ATP 结合位点"</strong>或<strong>"跨膜区域"</strong>。这就像蛋白质中的功能域。<br><br>
+                    <strong>电路</strong>是神经元之间的计算路径。就像生物学中的<strong>信号通路</strong>，信息从输入经过一系列神经元处理，最终产生输出。理解电路就是理解信息如何在模型中流动。<br><br>
+                    <strong>叠加态</strong>是关键挑战。由于模型需要编码的概念远多于神经元数量，多个特征可能共享同一神经元。这就像<strong>一个氨基酸同时参与结构和功能</strong>——比如一个残基既参与稳定核心结构，又参与底物结合。解耦这些信息很困难。<br><br>
+                    接下来介绍如何解决这个问题——这就是稀疏自编码器的用武之地。
+                </div>
+            </section>
+
+            <!-- 第 6 页：稀疏自编码器 SAE -->
+            <section>
+                <h2>🔧 稀疏自编码器 (SAE): 解耦特征的关键工具</h2>
+                
+                <div class="key-concept">
+                    <strong>核心思想</strong>: 将混合特征"梳开"成独立概念
+                </div>
+                
+                <div style="background: rgba(52, 152, 219, 0.1); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                    <h4 style="color: #3498db; margin-top: 0;">📊 工作原理</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;">
+                        <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 2em;">🎨</div>
+                            <strong>输入</strong><br>
+                            <span style="font-size: 0.8em;">混合的神经元激活<br>（多特征叠加）</span>
+                        </div>
+                        <div style="background: rgba(52, 152, 219, 0.2); padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <div>
+                                <strong style="font-size: 1.2em;">➡️ SAE ➡️</strong><br>
+                                <span style="font-size: 0.8em;">棱镜效应</span>
+                            </div>
+                        </div>
+                        <div style="background: rgba(46, 204, 113, 0.2); padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 2em;">🌈</div>
+                            <strong>输出</strong><br>
+                            <span style="font-size: 0.8em;">稀疏的特征字典<br>（每个特征独立）</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; font-style: italic;">类比：从混合光谱中分离出单个波长的光</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 15px; border-radius: 10px;">
+                        <h4 style="color: #f39c12; margin-top: 0;">🚀 关键突破 (2024-2025)</h4>
+                        <ul style="font-size: 0.8em;">
+                            <li>OpenAI: 1600 万特征的 SAE，训练于 GPT-4 激活</li>
+                            <li>Anthropic: "Golden Gate Claude"特征发现</li>
+                            <li>可扩展性：特征质量随 SAE 规模提升</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 15px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">🧬 生物学应用</h4>
+                        <ul style="font-size: 0.8em;">
+                            <li>从 ESM-2 中提取结合位点、结构模体等特征</li>
+                            <li>发现生物学概念在原始神经元中是叠加的</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://arxiv.org/pdf/2508.15841" target="_blank">Developmental Interpretability Review (2025)</a> | 
+                    <a href="https://arxiv.org/html/2507.08017v4" target="_blank">Mechanistic Indicators of Understanding (2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 10 分钟）：</strong><br><br>
+                    稀疏自编码器是近年来最重要的突破之一。<br><br>
+                    <strong>工作原理</strong>：想象你有一束混合光，包含多种颜色。SAE 就像一个<strong>棱镜</strong>，能把这束光分解成独立的光谱。在模型中，SAE 把混合的神经元激活分解成独立的特征。<br><br>
+                    技术细节（简化版）：SAE 学习一个<strong>过完备的特征字典</strong>（特征数远多于原始神经元），但强制每个输入只激活少数特征（<strong>稀疏性</strong>）。这样，每个特征更可能是<strong>"单义的"</strong>——只编码一个概念。<br><br>
+                    <strong>关键突破</strong>：2024-2025 年，OpenAI 训练了一个 1600 万特征的 SAE，发现特征质量随规模提升有清晰的缩放定律。这意味着我们可以系统地改进可解释性工具——不是靠运气，而是靠工程。<br><br>
+                    <strong>生物学意义</strong>：在蛋白质模型中，SAE 可以分离出编码特定生物学概念的特征，如<strong>"锌指结构"</strong>、<strong>"激酶活性位点"</strong>等。这为发现新生物学提供了工具。<br><br>
+                    <strong>关键洞见</strong>：大多数生物学概念在原始神经元中是叠加的，但 SAE 能有效解耦它们。这解释了为什么直接分析神经元难以理解——不是模型没学到，而是编码方式复杂。<br><br>
+                    这就像从粗提物纯化到单体蛋白——纯化后才能研究具体功能。
+                </div>
+            </section>
+
+            <!-- 第 7 页：特征发现案例 -->
+            <section>
+                <h2>🔬 特征发现：从文本到蛋白质的案例</h2>
+                
+                <table style="width: 100%; margin: 20px 0;">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">模型类型</th>
+                            <th style="width: 35%;">发现特征</th>
+                            <th style="width: 40%;">生物学/语义含义</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>📝 语言模型</td>
+                            <td>"金门大桥"特征</td>
+                            <td>对旧金山、桥梁、红色、加州等概念响应</td>
+                        </tr>
+                        <tr>
+                            <td>📝 语言模型</td>
+                            <td>拒绝机制特征</td>
+                            <td>控制模型拒绝有害请求的神经元回路</td>
+                        </tr>
+                        <tr>
+                            <td>🧬 蛋白质模型 (ESM-2)</td>
+                            <td>结合位点特征</td>
+                            <td>识别配体结合区域（如 ATP、金属离子）</td>
+                        </tr>
+                        <tr>
+                            <td>🧬 蛋白质模型 (ESM-2)</td>
+                            <td>结构模体特征</td>
+                            <td>编码α螺旋、β折叠等二级结构倾向</td>
+                        </tr>
+                        <tr>
+                            <td>🧬 蛋白质模型 (ESM-2)</td>
+                            <td>功能域特征</td>
+                            <td>识别激酶、G 蛋白偶联受体、核受体等</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="important-box">
+                    <strong>💡 关键发现 (InterPLM, 2024)</strong>: 从 ESM-2 提取数千个可解释特征，发现大多数生物学概念在原始神经元中是叠加的，但 SAE 能有效分离它们。这意味着模型确实"理解"了这些生物学概念，只是编码方式复杂。
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://transformer-circuits.pub/2025/july-update/index.html" target="_blank">Circuits Updates - July 2025</a> | 
+                    <a href="https://openreview.net/pdf?id=yzqN8D1pQz" target="_blank">Interpretable Protein Structure Prediction (2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    这张表展示了在不同模型中发现的特征。<br><br>
+                    <strong>语言模型案例</strong>：<br>
+                    - <strong>"金门大桥"特征</strong>：Anthropic 发现某个特征会对金门大桥相关内容激活，包括旧金山、桥梁、红色、加州等概念。这说明模型学到了语义关联。<br>
+                    - <strong>拒绝机制特征</strong>：更有趣的是，他们发现了控制模型拒绝有害请求的特征。激活这些特征可以增强模型的安全性。<br><br>
+                    <strong>蛋白质模型案例</strong>（InterPLM 工作）：<br>
+                    Simon 和 Zou (2024) 从 ESM-2 中提取了数千个可解释特征：<br>
+                    - <strong>结合位点特征</strong>：某些特征对 ATP 结合位点、金属离子结合位点等区域强激活<br>
+                    - <strong>结构模体特征</strong>：某些特征编码α螺旋倾向、β折叠倾向等<br>
+                    - <strong>功能域特征</strong>：某些特征识别激酶催化域、GPCR 跨膜区等<br><br>
+                    <strong>关键发现</strong>：大多数生物学概念在原始神经元中是叠加的，但 SAE 能有效分离它们。这意味着模型确实"理解"了这些生物学概念，只是编码方式复杂。<br><br>
+                    <strong>对湿实验的意义</strong>：如果某个特征在特定蛋白中强激活，可能预示特定功能或结构。这可以生成新假设——比如"这个未表征的蛋白可能有激酶活性"。
+                </div>
+            </section>
+
+            <!-- 第 8 页：操控技术概述 -->
+            <section>
+                <h2>🎮 操控模型行为：从理解到控制</h2>
+                
+                <div class="key-concept">
+                    <strong>核心思想</strong>: 理解后可干预，干预后可验证
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(52, 152, 219, 0.15)); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                    <h4 style="color: #2ecc71; margin-top: 0;">🧬 生物学类比：功能基因组学</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3em;">🔬</div>
+                            <strong>发现基因功能</strong><br>
+                            <span style="font-size: 0.85em;">某个基因可能控制某功能</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 3em;">🧪</div>
+                            <strong>验证基因功能</strong><br>
+                            <span style="font-size: 0.85em;">敲除/过表达验证表型</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; font-size: 2em;">⬇️</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3em;">🧠</div>
+                            <strong>发现模型特征</strong><br>
+                            <span style="font-size: 0.85em;">某个特征可能控制某行为</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 3em;">⚡</div>
+                            <strong>验证特征功能</strong><br>
+                            <span style="font-size: 0.85em;">激活/抑制验证行为变化</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5em;">✏️</div>
+                        <strong>激活编辑</strong><br>
+                        <span style="font-size: 0.8em;">直接修改激活值</span>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5em;">🧭</div>
+                        <strong>激活导向</strong><br>
+                        <span style="font-size: 0.8em;">添加导向向量</span>
+                    </div>
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5em;">🔧</div>
+                        <strong>表示工程</strong><br>
+                        <span style="font-size: 0.8em;">系统性操控表示</span>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://www.emergentmind.com/topics/activation-editing-in-llms" target="_blank">Activation Editing in LLMs (2026)</a> | 
+                    <a href="https://arxiv.org/html/2502.17601v1" target="_blank">Representation Engineering for LLMs (2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    理解模型后，下一步是操控它。这不仅是技术展示，更是验证理解的手段。<br><br>
+                    <strong>生物学类比</strong>：这就像<strong>功能基因组学</strong>。我们发现某个基因可能控制某功能，然后通过<strong>敲除或过表达</strong>来验证。如果能成功操控表型，说明我们真正理解了基因功能。<br><br>
+                    同样，如果我们能通过干预模型内部状态来改变其行为，说明我们真正理解了它的计算机制。<br><br>
+                    <strong>主要方法</strong>：<br>
+                    1. <strong>激活编辑</strong>：直接修改特定神经元的激活值。就像直接改变某个蛋白的表达水平。<br>
+                    2. <strong>激活导向</strong>：添加"导向向量"来偏移激活。就像给信号通路添加激动剂或拮抗剂。<br>
+                    3. <strong>表示工程</strong>：系统性地设计和操控表示空间。就像设计合成生物学回路。<br><br>
+                    <strong>关键优势</strong>：这些方法<strong>不需要重新训练模型</strong>，在推理时进行干预，计算开销小，且<strong>可逆可调试</strong>。这对生物学应用尤为重要——我们可以快速测试不同假设。<br><br>
+                    接下来详细讲解激活导向技术。
+                </div>
+            </section>
+
+            <!-- 第 9 页：激活导向技术 -->
+            <section>
+                <h2>🧭 激活导向 (Activation Steering)</h2>
+                
+                <div class="key-concept">
+                    <strong>技术核心</strong>: 计算"导向向量"并在推理时添加
+                </div>
+                
+                <div style="background: rgba(52, 152, 219, 0.1); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                    <h4 style="color: #3498db; margin-top: 0;">📋 工作流程</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <div style="background: rgba(243, 156, 18, 0.2); padding: 15px; border-radius: 8px; flex: 1; margin: 0 5px; text-align: center;">
+                            <div style="font-size: 1.5em;">1️⃣</div>
+                            <strong>离线准备</strong><br>
+                            <span style="font-size: 0.75em;">用对比样本计算导向向量<br>例："爱"vs"恨"的激活差异</span>
+                        </div>
+                        <div style="font-size: 2em; margin: 0 10px;">➡️</div>
+                        <div style="background: rgba(52, 152, 219, 0.2); padding: 15px; border-radius: 8px; flex: 1; margin: 0 5px; text-align: center;">
+                            <div style="font-size: 1.5em;">2️⃣</div>
+                            <strong>推理干预</strong><br>
+                            <span style="font-size: 0.75em;">在前向传播中添加向量<br>修改特定层的隐藏状态</span>
+                        </div>
+                        <div style="font-size: 2em; margin: 0 10px;">➡️</div>
+                        <div style="background: rgba(46, 204, 113, 0.2); padding: 15px; border-radius: 8px; flex: 1; margin: 0 5px; text-align: center;">
+                            <div style="font-size: 1.5em;">3️⃣</div>
+                            <strong>继续生成</strong><br>
+                            <span style="font-size: 0.75em;">用修改后的激活继续推理<br>输出被"导向"的内容</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 15px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">🎯 应用场景</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li><strong>情感控制</strong>：调整输出情感倾向</li>
+                            <li><strong>安全性</strong>：增强拒绝有害请求的能力</li>
+                            <li><strong>事实性</strong>：减少幻觉，提高准确性</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 15px; border-radius: 10px;">
+                        <h4 style="color: #f39c12; margin-top: 0;">📄 关键研究</h4>
+                        <p style="font-size: 0.85em;"><strong>ActAdd</strong> (Turner et al., ICLR 2025)</p>
+                        <ul style="font-size: 0.8em;">
+                            <li>简单但有效：仅需 prompt 对计算向量</li>
+                            <li>无需训练，计算开销极小</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://openreview.net/forum?id=2XBPdPIcFK" target="_blank">Steering Language Models with Activation Engineering (ICLR 2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 10 分钟）：</strong><br><br>
+                    激活导向是最直观的操控方法。<br><br>
+                    <strong>工作原理</strong>：<br>
+                    1. <strong>准备对比样本对</strong>，如正面 vs 负面文本、真实 vs 虚假陈述<br>
+                    2. 让模型处理这些样本，记录内部激活<br>
+                    3. <strong>计算激活差异</strong>，得到"导向向量"<br>
+                    4. 推理时，在特定层<strong>添加这个向量</strong><br><br>
+                    举个例子：想让模型输出更积极的内容。准备一些积极和消极的文本对，计算它们激活的差异向量。推理时添加这个向量，模型就会倾向于生成更积极的输出。<br><br>
+                    <strong>ActAdd 技术</strong>：Turner 等人 (2024) 提出的方法非常简单但有效。仅需几个 prompt 对就能计算导向向量，<strong>无需训练</strong>。<br><br>
+                    <strong>生物学类比</strong>：这就像给信号通路添加<strong>激动剂或拮抗剂</strong>。我们不改变基因（模型权重），但通过添加外源分子（导向向量）来调节通路活性。<br><br>
+                    <strong>实际应用</strong>：可以增强模型的安全性（更倾向于拒绝有害请求），或提高事实性（减少幻觉）。在蛋白质模型中，可以用来 steering 预测的某些特性，如增加预测结构的热稳定性倾向。
+                </div>
+            </section>
+
+            <!-- 第 10 页：SAE 基础精准操控 -->
+            <section>
+                <h2>🎯 基于 SAE 的精准操控</h2>
+                
+                <div class="key-concept">
+                    <strong>优势</strong>: 比传统导向更精准，副作用更小
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;">
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                        <h4 style="color: #e74c3c; margin-top: 0;">⚠️ 传统方法局限</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>导向向量影响<strong>多义特征</strong></li>
+                            <li>可能产生<strong>意外副作用</strong></li>
+                            <li>难以精准定位特定功能</li>
+                        </ul>
+                        <div style="text-align: center; font-size: 3em; margin-top: 20px;">🎭➡️❓</div>
+                        <p style="font-size: 0.8em; text-align: center; font-style: italic;">一个神经元编码多个概念</p>
+                    </div>
+                    
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #2ecc71;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">✅ SAE 方法优势</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>操作<strong>单义特征</strong>（每个特征一个概念）</li>
+                            <li><strong>精准定位</strong>特定功能</li>
+                            <li><strong>最小化</strong>对其他功能的影响</li>
+                        </ul>
+                        <div style="text-align: center; font-size: 3em; margin-top: 20px;">🎯➡️✅</div>
+                        <p style="font-size: 0.8em; text-align: center; font-style: italic;">一个特征编码一个概念</p>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(46, 204, 113, 0.15)); padding: 20px; border-radius: 12px;">
+                    <h4 style="color: #3498db; margin-top: 0;">📄 案例：SPARE 方法 (NAACL 2025)</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>用 SAE 操控<strong>知识选择行为</strong></li>
+                        <li>引导模型使用<strong>上下文知识</strong> vs <strong>参数知识</strong></li>
+                        <li>保持模型其他行为<strong>不变</strong></li>
+                        <li>效果：能有效引导模型，同时最小化副作用</li>
+                    </ul>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://aclanthology.org/2025.naacl-long.264.pdf" target="_blank">SPARE: SAE-Based Steering (NAACL 2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    传统激活导向有个问题：它操作的是原始神经元激活，而这些激活是<strong>多义的</strong>（一个神经元编码多个概念）。这就像调节一个同时控制心跳和消化的基因——可能产生意外副作用。<br><br>
+                    <strong>SAE 方法的优势</strong>：SAE 解耦了特征，每个特征更可能是<strong>单义的</strong>。操作 SAE 特征就像操作<strong>专门化的基因</strong>——只影响特定功能。<br><br>
+                    <strong>SPARE 案例</strong>：这个方法用 SAE 操控模型的知识选择行为。具体来说：<br>
+                    - 识别与知识选择相关的 SAE 特征<br>
+                    - 提取控制"使用上下文知识"vs"使用内部知识"的特征<br>
+                    - 干预这些特征来引导模型行为<br><br>
+                    结果：能有效引导模型，同时<strong>最小化对其他行为的影响</strong>。<br><br>
+                    <strong>生物学意义</strong>：这对蛋白质工程尤为重要。我们可能想改变蛋白质的某个特性（如热稳定性），但不影响其他功能（如催化活性）。SAE 基础操控提供了这种<strong>精准性</strong>。<br><br>
+                    类比：就像用 CRISPR 精准编辑某个基因，而不是用诱变剂随机突变。
+                </div>
+            </section>
+
+            <!-- 第 11 页：蛋白质语言模型概述 -->
+            <section>
+                <h2>🧬 蛋白质语言模型：生物学中的"大语言模型"</h2>
+                
+                <div class="key-concept">
+                    <strong>核心类比</strong>: 氨基酸序列 = "蛋白质语言"
+                </div>
+                
+                <table style="width: 100%; margin: 20px 0;">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">组件</th>
+                            <th style="width: 35%;">NLP 模型</th>
+                            <th style="width: 40%;">蛋白质模型</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>词汇表</strong></td>
+                            <td>数万个单词</td>
+                            <td>20 种氨基酸 (+ 特殊 token)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>训练数据</strong></td>
+                            <td>文本语料库</td>
+                            <td>数百万蛋白质序列 (UniProt 等)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>训练任务</strong></td>
+                            <td>预测掩码的词</td>
+                            <td>预测掩码的氨基酸</td>
+                        </tr>
+                        <tr>
+                            <td><strong>架构</strong></td>
+                            <td>Transformer</td>
+                            <td>Transformer (相同!)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 15px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 2em;">🔵</div>
+                        <strong>ESM 系列</strong><br>
+                        <span style="font-size: 0.8em;">Meta AI<br>ESM-2 (15B 参数)<br>ESM-3 (98B 参数)</span>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 15px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 2em;">🟢</div>
+                        <strong>AlphaFold</strong><br>
+                        <span style="font-size: 0.8em;">DeepMind<br>AF2, AF3<br>结构预测革命</span>
+                    </div>
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 15px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 2em;">🟠</div>
+                        <strong>ESMFold</strong><br>
+                        <span style="font-size: 0.8em;">Meta AI<br>基于 ESM 的结构预测<br>快速、单序列</span>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://arxiv.org/html/2502.06881v1" target="_blank">Comprehensive Review of Protein Language Models (2025)</a> | 
+                    <a href="https://www.nature.com/articles/s41392-023-01381-z" target="_blank">AlphaFold2 and Applications (Nature 2023)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 10 分钟）：</strong><br><br>
+                    现在进入蛋白质语言模型部分。对湿实验研究者，这可能更熟悉。<br><br>
+                    <strong>核心类比</strong>：蛋白质序列可以看作一种"语言"。<br>
+                    - <strong>氨基酸</strong>是"单词"<br>
+                    - <strong>蛋白质结构/功能</strong>是"语义"<br>
+                    - <strong>进化过程</strong>"训练"了这个语言，使得序列编码功能信息<br><br>
+                    <strong>模型架构</strong>：蛋白质语言模型使用与 ChatGPT <strong>相同的 Transformer 架构</strong>。区别在于：<br>
+                    - 词汇表：20 种氨基酸（而不是数万个单词）<br>
+                    - 训练数据：数百万蛋白质序列（而不是文本）<br>
+                    - 训练任务：预测掩码的氨基酸（类似于完形填空）<br><br>
+                    <strong>主要模型</strong>：<br>
+                    - <strong>ESM 系列</strong>：Meta 开发，最大 150 亿参数。ESM-2 是最常用的，ESM-3 是最新的多模态模型。<br>
+                    - <strong>AlphaFold</strong>：DeepMind 开发，结构预测革命性突破。AF3 还能预测蛋白 - 核酸复合物。<br>
+                    - <strong>ESMFold</strong>：结合 ESM 和结构预测头，速度快，只需单序列输入。<br><br>
+                    <strong>能力</strong>：这些模型能预测结构、注释功能、预测突变效应，甚至设计新蛋白质。但关键问题是：<strong>它们如何做到？</strong>可解释性帮助我们回答这个问题。
+                </div>
+            </section>
+
+            <!-- 第 12 页：蛋白质模型可解释性进展 -->
+            <section>
+                <h2>🔬 蛋白质模型可解释性：最新进展</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 12px; border-left: 5px solid #3498db;">
+                        <h4 style="color: #3498db; margin-top: 0;">📄 InterPLM (Simon & Zou, 2024)</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>从 ESM-2 提取<strong>数千个可解释特征</strong></li>
+                            <li>特征对应：<strong>结合位点、结构模体、功能域</strong></li>
+                            <li>发现：生物学概念在神经元中<strong>叠加存在</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 12px; border-left: 5px solid #2ecc71;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">📄 Adams et al. (ICML 2025)</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>训练 SAE 于 ESM-2<strong>残差流</strong></li>
+                            <li>发现：<strong>通用特征 + 家族特异特征</strong>混合</li>
+                            <li>开发<strong>可视化工具</strong>帮助形成新假设</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 12px; border-left: 5px solid #f39c12;">
+                        <h4 style="color: #f39c12; margin-top: 0;">📄 ESMFold 机制解析 (Lu et al., 2026)</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li><strong>两阶段计算</strong>：序列编码 → 结构折叠</li>
+                            <li>发现<strong>线性可及接口</strong>控制物理/功能属性</li>
+                            <li>可通过<strong>向量添加</strong>操控电荷、距离等属性</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="important-box">
+                    <strong>💡 关键洞见</strong>: 这些工作共同表明，蛋白质语言模型确实学到了生物学相关特征，只是编码方式复杂。SAE 等工具能解耦这些特征，为精准蛋白质工程提供新手段。
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://transformer-circuits.pub/2025/july-update/index.html" target="_blank">Circuits Updates (2025)</a> | 
+                    <a href="https://www.emergentmind.com/topics/esmfold" target="_blank">ESMFold Mechanistic Analysis (2026)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 12 分钟）：</strong><br><br>
+                    这是蛋白质模型可解释性的核心进展。<br><br>
+                    <strong>InterPLM</strong>：这是首个系统性应用 SAE 到蛋白质模型的工作。研究者从 ESM-2 提取了数千个特征，发现：<br>
+                    - 某些特征对应已知<strong>结合位点</strong>（如 ATP 结合口袋）<br>
+                    - 某些特征编码<strong>结构模体</strong>（如α螺旋倾向序列）<br>
+                    - 某些特征识别<strong>功能域</strong>（如激酶催化域）<br><br>
+                    关键洞见：大多数生物学概念在原始神经元中是<strong>叠加的</strong>，这解释了为什么直接分析神经元难以理解。<br><br>
+                    <strong>Adams et al. (2025)</strong>：这个工作训练 SAE 于 ESM-2，发现模型使用<strong>通用特征</strong>（所有蛋白共有）和<strong>家族特异特征</strong>的混合。他们还开发了可视化工具，帮助研究者形成新假设。<br><br>
+                    <strong>ESMFold 机制</strong>：最新工作解析了 ESMFold 的计算机制：<br>
+                    - <strong>两阶段</strong>：先编码序列，再折叠结构<br>
+                    - 发现<strong>线性接口</strong>：可以通过向量添加操控物理属性<br>
+                    - 例：添加"电荷向量"可增加表面电荷<br><br>
+                    这些发现为<strong>精准蛋白质工程</strong>提供了新工具。
+                </div>
+            </section>
+
+            <!-- 第 13 页：蛋白质操控案例 -->
+            <section>
+                <h2>🧪 蛋白质模型操控：从理论到实践</h2>
+                
+                <div class="key-concept">
+                    <strong>Reticular 研究</strong>: 通过特征操控 steering 蛋白质属性
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.1)); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                    <h4 style="color: #3498db; margin-top: 0;">🔬 实验设计</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">🧠</div>
+                            <strong>模型</strong><br>
+                            <span style="font-size: 0.8em;">ESMFold</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">🎯</div>
+                            <strong>目标</strong><br>
+                            <span style="font-size: 0.8em;">修改表面属性<br>保持骨架结构</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">🔧</div>
+                            <strong>方法</strong><br>
+                            <span style="font-size: 0.8em;">识别并操控<br>相关 SAE 特征</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">✅ 结果</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>成功修改<strong>表面电荷分布</strong></li>
+                            <li>成功修改<strong>疏水性模式</strong></li>
+                            <li>骨架结构保持<strong>稳定</strong>（RMSD &lt; 1Å）</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #f39c12; margin-top: 0;">💡 意义</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>首次展示<strong>可解释性指导的蛋白质工程</strong></li>
+                            <li>为<strong>定向进化</strong>提供计算工具</li>
+                            <li>可加速<strong>药物设计、酶工程</strong></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://transformer-circuits.pub/2025/july-update/index.html" target="_blank">Circuits Updates - Reticular (2025)</a> | 
+                    <a href="https://openreview.net/pdf?id=yzqN8D1pQz" target="_blank">Matryoshka SAEs for ESMFold (2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 10 分钟）：</strong><br><br>
+                    这是最令人兴奋的部分——可解释性真正指导了蛋白质工程。<br><br>
+                    <strong>Reticular 研究</strong>：这个工作展示了如何通过操控 SAE 特征来 steering 蛋白质属性。<br><br>
+                    <strong>实验设计</strong>：<br>
+                    - 使用 ESMFold 模型<br>
+                    - 目标：修改表面属性（如电荷、疏水性），但保持骨架结构不变<br>
+                    - 方法：用 SAE 识别相关特征，然后干预这些特征<br><br>
+                    <strong>结果</strong>：<br>
+                    - 成功修改<strong>表面电荷分布</strong>（可能影响蛋白质相互作用）<br>
+                    - 成功修改<strong>疏水性模式</strong>（可能影响稳定性、溶解度）<br>
+                    - <strong>关键</strong>：骨架结构保持稳定（RMSD &lt; 1Å）<br><br>
+                    <strong>意义</strong>：<br>
+                    - 这是<strong>首次展示可解释性指导的蛋白质工程</strong><br>
+                    - 传统方法需要多轮定向进化，这里通过计算直接设计<br>
+                    - 应用：<strong>药物设计</strong>（优化结合特性）、<strong>酶工程</strong>（优化催化条件）<br><br>
+                    <strong>对湿实验的启示</strong>：可以先用计算方法筛选候选突变，再实验验证，大幅减少实验量。比如，想提高酶的热稳定性，可以先用模型预测哪些突变可能有效，再只验证排名靠前的几个。
+                </div>
+            </section>
+
+            <!-- 第 14 页：层级 SAE 与多尺度特征 -->
+            <section>
+                <h2>🪆 层级 SAE：捕捉蛋白质的多尺度结构</h2>
+                
+                <div class="key-concept">
+                    <strong>Matryoshka SAE</strong>: 嵌套式特征学习（俄罗斯套娃）
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="font-size: 4em;">🪆</div>
+                    <p style="font-style: italic; color: #7f8c8d;">像俄罗斯套娃一样，层层嵌套</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;">
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #e74c3c; margin-top: 0;">🤔 动机</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>蛋白质结构是<strong>多尺度的</strong>：<br>氨基酸 → 二级结构 → 结构域 → 整体折叠</li>
+                            <li>传统 SAE <strong>单一尺度</strong>，难以捕捉层次</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">✅ Matryoshka SAE</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li><strong>层级编码</strong>：粗粒度特征 → 细粒度特征</li>
+                            <li>更好<strong>解耦</strong>，更好<strong>可解释性</strong></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(46, 204, 113, 0.15)); padding: 20px; border-radius: 12px;">
+                    <h4 style="color: #3498db; margin-top: 0;">🎯 应用</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>首次实现 <strong>ESMFold 结构预测的 steering</strong></li>
+                        <li>可操控<strong>特定结构层次</strong>而不影响其他</li>
+                        <li>例：修改二级结构，保持整体折叠</li>
+                    </ul>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://openreview.net/pdf?id=yzqN8D1pQz" target="_blank">Matryoshka SAEs for Protein Structure (2025)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    蛋白质结构本质上是多尺度的，这需要特殊的可解释性工具。<br><br>
+                    <strong>动机</strong>：蛋白质有多个结构层次：<br>
+                    - <strong>一级结构</strong>：氨基酸序列<br>
+                    - <strong>二级结构</strong>：α螺旋、β折叠<br>
+                    - <strong>三级结构</strong>：结构域折叠<br>
+                    - <strong>四级结构</strong>：多亚基组装<br><br>
+                    传统 SAE 在单一尺度学习特征，难以捕捉这种层次性。<br><br>
+                    <strong>Matryoshka SAE</strong>：这个名字来自<strong>俄罗斯套娃</strong>。它学习层级特征：<br>
+                    - <strong>粗粒度特征</strong>：编码整体折叠模式<br>
+                    - <strong>中等粒度</strong>：编码结构域<br>
+                    - <strong>细粒度</strong>：编码二级结构、局部模体<br><br>
+                    优势：层级组织更好解耦特征，提高可解释性。<br><br>
+                    <strong>应用</strong>：首次实现了对 ESMFold 结构预测的 steering。可以操控特定层次（如修改二级结构）而不影响其他层次（如整体折叠）。<br><br>
+                    <strong>生物学意义</strong>：这让我们能更精准地设计蛋白质——比如只修改活性位点周围的局部结构，而不破坏整体稳定性。这就像用定点突变而不是随机突变。
+                </div>
+            </section>
+
+            <!-- 第 15 页：对湿实验的启示 -->
+            <section>
+                <h2>💡 对湿实验研究的启示</h2>
+                
+                <div class="key-concept">
+                    <strong>核心信息</strong>: 可解释性是干湿实验的桥梁
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #3498db; margin-top: 0;">🔬 假设生成</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>从模型特征发现新的结构 - 功能关系</li>
+                            <li>例：某个特征激活预示特定功能</li>
+                            <li>类似基因组学发现候选基因</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">📐 实验设计优化</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>用模型预测突变效应，优先验证高置信度预测</li>
+                            <li>减少试错，提高实验效率</li>
+                            <li>可减少 70-90% 的实验量</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #f39c12; margin-top: 0;">📊 结果解释</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>当实验结果与预测不符时，用可解释性分析原因</li>
+                            <li>识别模型的决策边界和局限</li>
+                            <li>可能发现新的生物学现象</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #e74c3c; margin-top: 0;">🚀 新研究方向</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>验证模型发现的新特征是否真实存在</li>
+                            <li>用实验数据改进模型可解释性</li>
+                            <li>干湿结合，相互促进</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="important-box">
+                    <strong>⚠️ 关键提醒</strong>: 可解释性不是替代实验，而是增强实验。模型预测必须用实验验证。
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://www.pnas.org/doi/10.1073/pnas.2406285121" target="_blank">PNAS: Protein LMs Learn Evolutionary Statistics (2024)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 10 分钟）：</strong><br><br>
+                    现在讨论对湿实验研究的具体启示。<br><br>
+                    <strong>假设生成</strong>：可解释性模型可以生成新假设。例：<br>
+                    - 模型发现某个序列模式强激活某特征，该特征与热稳定性相关<br>
+                    - 假设：这个序列模式影响热稳定性<br>
+                    - 实验：构建突变体验证<br><br>
+                    这类似于用基因组学发现候选基因，再用功能实验验证。<br><br>
+                    <strong>实验设计优化</strong>：<br>
+                    - 传统：随机或基于已知知识选择突变位点<br>
+                    - 新方法：用模型预测所有可能突变，优先验证高置信度预测<br>
+                    - 结果：减少 70-90% 的实验量<br><br>
+                    已有案例：有研究组用这种方法筛选酶突变体，从需要筛选几百个突变体减少到只需验证十几个。<br><br>
+                    <strong>结果解释</strong>：当实验结果与预测不符时：<br>
+                    - 用可解释性分析模型"看"到了什么<br>
+                    - 可能发现模型依赖了错误特征<br>
+                    - 或发现新的生物学现象（模型捕捉到了未知规律）<br><br>
+                    <strong>新研究方向</strong>：<br>
+                    - 验证模型发现的特征是否真实（如用结构生物学方法）<br>
+                    - 用高质量实验数据改进模型<br><br>
+                    <strong>关键</strong>：可解释性不是替代实验，而是增强实验。
+                </div>
+            </section>
+
+            <!-- 第 16 页：局限性与挑战 -->
+            <section>
+                <h2>⚠️ 当前局限性与挑战</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(231, 76, 60, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                        <h4 style="color: #e74c3c; margin-top: 0;">🔧 技术局限</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>SAE 训练<strong>计算成本高</strong>（需要大量 GPU 时间）</li>
+                            <li>特征标注仍需<strong>人工</strong>（自动化程度有限）</li>
+                            <li><strong>跨模型泛化</strong>能力待验证</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #f39c12;">
+                        <h4 style="color: #f39c12; margin-top: 0;">🧬 生物学局限</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>模型<strong>训练数据偏差</strong>可能影响特征</li>
+                            <li>某些生物学概念可能<strong>未被模型学习</strong></li>
+                            <li><strong>动态过程</strong>（如构象变化）难以捕捉</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #3498db;">
+                        <h4 style="color: #3498db; margin-top: 0;">❓ 解释的局限性</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li><strong>可解释≠正确</strong>：模型可能"看似理解"但实际错误</li>
+                            <li><strong>必须用实验验证</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #2ecc71;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">🚀 未来方向</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>更高效的 SAE 训练方法</li>
+                            <li><strong>自动化特征标注</strong></li>
+                            <li>整合<strong>多模态数据</strong>（序列 + 结构 + 功能）</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="citation">
+                    参考资料：<a href="https://arxiv.org/html/2602.11180v1" target="_blank">Mechanistic Interpretability Challenges (2026)</a>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    诚实讨论局限性同样重要。<br><br>
+                    <strong>技术局限</strong>：<br>
+                    - SAE 训练成本高：训练一个 1600 万特征的 SAE 需要数千 GPU 小时<br>
+                    - 特征标注：发现特征后，需要人工判断它编码什么概念<br>
+                    - 泛化：在一个模型中发现的特征，不一定适用于其他模型<br><br>
+                    <strong>生物学局限</strong>：<br>
+                    - 数据偏差：训练数据中过度代表的蛋白家族可能主导特征<br>
+                    - 概念覆盖：模型可能没学习到某些重要生物学概念<br>
+                    - 动态过程：当前模型主要处理静态序列/结构，难以捕捉构象变化、动力学过程<br><br>
+                    <strong>解释的局限性</strong>：<br>
+                    - <strong>关键警示</strong>：可解释≠正确。模型可能给出看似合理的解释，但实际推理是错误的<br>
+                    - <strong>必须用实验验证</strong><br><br>
+                    <strong>未来方向</strong>：<br>
+                    - 更高效的训练方法<br>
+                    - 自动化特征标注（用已知数据库）<br>
+                    - 整合多模态数据<br><br>
+                    <strong>对湿实验研究者的建议</strong>：将可解释性作为假设生成工具，而非真理来源。
+                </div>
+            </section>
+
+            <!-- 第 17 页：实践建议 -->
+            <section>
+                <h2>🛠️ 给湿实验研究者的实践建议</h2>
+                
+                <div class="key-concept">
+                    <strong>如何开始使用这些工具</strong>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.1)); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                    <h4 style="color: #3498db; margin-top: 0;">📋 入门步骤</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">1️⃣</div>
+                            <strong>学习基础</strong><br>
+                            <span style="font-size: 0.75em;">了解 ESM/AlphaFold<br>基本使用</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">2️⃣</div>
+                            <strong>使用预训练模型</strong><br>
+                            <span style="font-size: 0.75em;">直接用 ESM-2/<br>ESMFold</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">3️⃣</div>
+                            <strong>尝试特征可视化</strong><br>
+                            <span style="font-size: 0.75em;">使用公开工具<br>查看激活</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em;">4️⃣</div>
+                            <strong>设计验证实验</strong><br>
+                            <span style="font-size: 0.75em;">小规模验证<br>模型预测</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #3498db; margin-top: 0;">🔧 可用工具</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li><strong>ESM 仓库</strong>: <a href="https://github.com/facebookresearch/esm" target="_blank">github.com/facebookresearch/esm</a></li>
+                            <li><strong>TransformerLens</strong>: 机制可解释性工具包</li>
+                            <li><strong>预训练 SAE 特征</strong>: Gemma Scope, Llama Scope</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #2ecc71; margin-top: 0;">🤝 合作机会</h4>
+                        <ul style="font-size: 0.85em;">
+                            <li>与<strong>计算生物学家</strong>合作</li>
+                            <li>参与<strong>开源项目</strong></li>
+                            <li><strong>共享实验数据</strong>改进模型</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="important-box">
+                    <strong>💡 建议</strong>: 从一个小问题开始，不要试图一次性解决大问题。选一个具体的科学问题，用模型生成假设，然后实验验证。
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 8 分钟）：</strong><br><br>
+                    最后，给想尝试这些方法的湿实验研究者一些实用建议。<br><br>
+                    <strong>入门步骤</strong>：<br>
+                    1. <strong>学习基础</strong>：先熟悉 ESM/AlphaFold 的基本使用。有很多教程，Colab 笔记本可以直接运行。<br>
+                    2. <strong>使用预训练模型</strong>：不需要自己训练大模型，Meta 和 DeepMind 都提供了预训练权重。<br>
+                    3. <strong>尝试特征可视化</strong>：使用公开工具查看模型激活模式。TransformerLens 是个好起点。<br>
+                    4. <strong>设计小规模验证实验</strong>：选一个具体科学问题，用模型生成假设，然后实验验证。<br><br>
+                    <strong>可用工具</strong>：<br>
+                    - <strong>ESM 仓库</strong>：提供预训练模型和示例代码<br>
+                    - <strong>TransformerLens</strong>：机制可解释性工具包，可用于分析模型<br>
+                    - <strong>预训练 SAE</strong>：一些研究组公开了训练好的 SAE 特征<br><br>
+                    <strong>合作机会</strong>：<br>
+                    - 与<strong>计算生物学家合作</strong>：他们懂技术，你懂生物学，互补<br>
+                    - 参与<strong>开源项目</strong>：贡献实验数据，使用他人工具<br>
+                    - <strong>共享数据</strong>：高质量实验数据能帮助改进模型<br><br>
+                    <strong>建议</strong>：从一个小问题开始，不要试图一次性解决大问题。比如，先尝试用 ESM 预测几个已知突变的效果，看看模型表现如何，再扩展到未知突变。
+                </div>
+            </section>
+
+            <!-- 第 18 页：总结 -->
+            <section>
+                <h2>📌 总结</h2>
+                
+                <div class="key-concept">
+                    <strong>核心信息</strong>: 可解释性连接理解与操控，推动生物学发现
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 30px 0;">
+                    <div style="background: rgba(52, 152, 219, 0.15); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 2.5em;">🚀</div>
+                        <h4 style="color: #3498db;">关键进展</h4>
+                        <ul style="font-size: 0.8em; text-align: left;">
+                            <li>SAE 等技术使大模型内部变得可理解</li>
+                            <li>激活操控技术实现精准干预</li>
+                            <li>蛋白质模型中已发现生物学相关特征</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(46, 204, 113, 0.15); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 2.5em;">🧬</div>
+                        <h4 style="color: #2ecc71;">生物学意义</h4>
+                        <ul style="font-size: 0.8em; text-align: left;">
+                            <li>从"黑箱预测"到"可理解推理"</li>
+                            <li>生成新假设，指导实验设计</li>
+                            <li>加速蛋白质工程、药物发现</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(243, 156, 18, 0.15); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 2.5em;">🔮</div>
+                        <h4 style="color: #f39c12;">未来展望</h4>
+                        <ul style="font-size: 0.8em; text-align: left;">
+                            <li>更高效的解释工具</li>
+                            <li>干湿实验深度整合</li>
+                            <li>可解释性指导的蛋白质工程</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(46, 204, 113, 0.2)); padding: 25px; border-radius: 15px; margin-top: 20px;">
+                    <p style="font-size: 1.1em; text-align: center; margin: 0;">
+                        <strong>🎯 关键信息</strong>: 可解释性不是纯技术问题，它是连接计算与实验的桥梁。<br>
+                        对湿实验研究者，理解这些方法能帮助你更好地利用 AI 工具，发现新的生物学。
+                    </p>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿（约 5 分钟）：</strong><br><br>
+                    最后总结一下。<br><br>
+                    <strong>关键进展</strong>：<br>
+                    - SAE 等技术让我们能"看到"大模型内部<br>
+                    - 激活操控技术让我们能精准干预模型行为<br>
+                    - 在蛋白质模型中，已经发现了与生物学概念对应的特征<br><br>
+                    <strong>生物学意义</strong>：<br>
+                    - 从"黑箱预测"进步到"可理解推理"<br>
+                    - 可解释性生成新假设，指导实验设计<br>
+                    - 长期目标：加速蛋白质工程、药物发现<br><br>
+                    <strong>未来展望</strong>：<br>
+                    - 技术会更高效、更易用<br>
+                    - 干湿实验会深度整合<br>
+                    - 最终目标：用可解释性指导设计全新蛋白质<br><br>
+                    <strong>关键信息</strong>：可解释性不是纯技术问题，它是连接计算与实验的桥梁。对湿实验研究者，理解这些方法能帮助你更好地利用 AI 工具，发现新的生物学。<br><br>
+                    今天的汇报就到这里，下面是问答时间。
+                </div>
+            </section>
+
+            <!-- 第 19 页：问答 -->
+            <section>
+                <h2>❓ 问答与讨论</h2>
+                
+                <div style="text-align: center; margin: 50px 0;">
+                    <div style="font-size: 4em; margin-bottom: 30px;">💬</div>
+                    <p style="font-size: 1.5em; color: #2ecc71;">欢迎提问！</p>
+                </div>
+                
+                <div style="background: rgba(52, 152, 219, 0.1); padding: 25px; border-radius: 15px;">
+                    <h4 style="color: #3498db; margin-top: 0;">💡 讨论话题建议</h4>
+                    <ul style="font-size: 0.95em;">
+                        <li>如何将可解释性应用到<strong>你的研究课题</strong>？</li>
+                        <li><strong>模型预测与实验结果</strong>的对比经验</li>
+                        <li><strong>技术细节</strong>深入讨论（SAE 训练、特征标注等）</li>
+                        <li><strong>合作机会</strong>探索</li>
+                        <li>其他感兴趣的话题</li>
+                    </ul>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿</strong>：<br><br>
+                    现在是问答时间。欢迎大家提问，无论是技术细节、应用建议，还是合作可能性。<br><br>
+                    如果问题比较复杂，我们可以会后继续讨论。<br><br>
+                    也欢迎大家分享自己使用 AI 工具的经验或困惑。<br><br>
+                    我会尽量回答所有问题，如果有些问题我暂时不知道答案，我会记录下来，后续查证后回复大家。
+                </div>
+            </section>
+
+            <!-- 第 20 页：参考文献 -->
+            <section>
+                <h2>📚 主要参考文献</h2>
+                
+                <div style="font-size: 0.65em; text-align: left; overflow-y: auto; max-height: 550px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px;">
+                    <ol style="line-height: 2;">
+                        <li>Wang et al. "Mechanistic Interpretability for LLM Alignment" (2026) <a href="https://arxiv.org/html/2602.11180v1" target="_blank">arXiv:2602.11180</a></li>
+                        <li>Zhao et al. "Developmental Interpretability Review" (2025) <a href="https://arxiv.org/pdf/2508.15841" target="_blank">arXiv:2508.15841</a></li>
+                        <li>Turner et al. "Steering Language Models with Activation Engineering" (ICLR 2025) <a href="https://openreview.net/forum?id=2XBPdPIcFK" target="_blank">OpenReview</a></li>
+                        <li>Simon & Zou. "InterPLM: Interpretable Features in Protein LMs" (2024)</li>
+                        <li>Adams et al. "SAEs on Protein Language Models" (ICML 2025) <a href="https://icml.cc/virtual/2025/poster/43465" target="_blank">ICML Poster</a></li>
+                        <li>Lu et al. "ESMFold Mechanistic Analysis" (2026) <a href="https://www.emergentmind.com/topics/esmfold" target="_blank">Emergent Mind</a></li>
+                        <li>"Circuits Updates - July 2025" <a href="https://transformer-circuits.pub/2025/july-update/index.html" target="_blank">Transformer Circuits</a></li>
+                        <li>"Activation Editing in LLMs" (2026) <a href="https://www.emergentmind.com/topics/activation-editing-in-llms" target="_blank">Emergent Mind</a></li>
+                        <li>SPARE: "SAE-Based Steering" (NAACL 2025) <a href="https://aclanthology.org/2025.naacl-long.264.pdf" target="_blank">ACL Anthology</a></li>
+                        <li>"Comprehensive Review of Protein Language Models" (2025) <a href="https://arxiv.org/html/2502.06881v1" target="_blank">arXiv:2502.06881</a></li>
+                        <li>"AlphaFold2 and Applications" (Nature 2023) <a href="https://www.nature.com/articles/s41392-023-01381-z" target="_blank">Nature</a></li>
+                        <li>"Protein LMs Learn Evolutionary Statistics" (PNAS 2024) <a href="https://www.pnas.org/doi/10.1073/pnas.2406285121" target="_blank">PNAS</a></li>
+                    </ol>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(52, 152, 219, 0.1); border-radius: 10px;">
+                    <h4 style="color: #3498db; margin-top: 0; font-size: 0.9em;">📖 建议阅读顺序</h4>
+                    <ol style="font-size: 0.8em; margin: 0;">
+                        <li><strong>入门</strong>: Comprehensive Review of Protein Language Models</li>
+                        <li><strong>可解释性基础</strong>: Mechanistic Interpretability for LLM Alignment</li>
+                        <li><strong>蛋白质应用</strong>: InterPLM、SAEs on Protein LMs</li>
+                        <li><strong>操控技术</strong>: Activation Editing、SPARE</li>
+                    </ol>
+                </div>
+                
+                <div class="speaker-notes">
+                    <strong>讲稿</strong>：<br><br>
+                    这是主要参考文献列表。所有链接都可以直接点击访问。<br><br>
+                    <strong>建议阅读顺序</strong>：<br>
+                    1. <strong>入门</strong>：Comprehensive Review of Protein Language Models — 全面了解蛋白质语言模型<br>
+                    2. <strong>可解释性基础</strong>：Mechanistic Interpretability for LLM Alignment — 理解核心概念<br>
+                    3. <strong>蛋白质应用</strong>：InterPLM、SAEs on Protein LMs — 看具体应用案例<br>
+                    4. <strong>操控技术</strong>：Activation Editing、SPARE — 学习如何干预模型<br><br>
+                    我会把这份 PPT 和参考文献列表发给大家。PPT 中所有引用都有超链接，方便大家溯源。<br><br>
+                    如果有任何问题，随时联系我。
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <div class="slide-number" id="slideNumber"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: false, // 使用自定义幻灯片编号
+            showSlideNumber: 'all',
+            controls: true,
+            progress: true,
+            center: true,
+            transition: 'slide',
+            // 禁用演讲者视图快捷键，因为讲稿已直接显示
+            showNotes: false,
+        });
+        
+        // 更新幻灯片编号
+        function updateSlideNumber() {
+            const slideNumberEl = document.getElementById('slideNumber');
+            const state = Reveal.getState();
+            slideNumberEl.textContent = `${state.indexh + 1} / ${Reveal.getTotalSlides()}`;
+        }
+        
+        Reveal.on('slidechanged', updateSlideNumber);
+        Reveal.on('ready', updateSlideNumber);
+    </script>
+</body>
+</html>
