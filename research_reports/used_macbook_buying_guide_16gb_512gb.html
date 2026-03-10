@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手 MacBook 购买建议 - 开发者专用 (16GB+512GB)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #1d1d1f; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        header { background: linear-gradient(135deg, #000 0%, #333 100%); color: white; padding: 50px 40px; text-align: center; }
+        header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        header p { opacity: 0.8; font-size: 1.1em; }
+        .dev-badge { display: inline-block; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); color: white; padding: 8px 20px; border-radius: 25px; font-size: 1em; font-weight: 600; margin: 10px 5px; }
+        .budget-badge { display: inline-block; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 8px 20px; border-radius: 25px; font-size: 1em; font-weight: 600; margin-top: 15px; }
+        .used-badge { display: inline-block; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 8px 20px; border-radius: 25px; font-size: 1em; font-weight: 600; margin-top: 15px; }
+        .content { padding: 40px; }
+        .recommendation-card { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 35px; border-radius: 15px; margin-bottom: 30px; }
+        .recommendation-card h2 { font-size: 1.8em; margin-bottom: 15px; }
+        .recommendation-card .price { font-size: 2.5em; font-weight: 700; margin: 20px 0; }
+        .recommendation-card .original-price { text-decoration: line-through; opacity: 0.7; font-size: 1.2em; }
+        .recommendation-card .savings { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 10px; display: inline-block; margin-top: 10px; }
+        .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .spec-item { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; text-align: center; }
+        .spec-item .label { font-size: 0.9em; opacity: 0.9; }
+        .spec-item .value { font-size: 1.3em; font-weight: 600; margin-top: 5px; }
+        .option-card { background: #f5f5f7; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; transition: all 0.3s; }
+        .option-card:hover { transform: translateX(10px); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); }
+        .option-card h3 { font-size: 1.4em; margin-bottom: 10px; color: #1d1d1f; }
+        .option-card .price-tag { font-size: 1.5em; color: #0071e3; font-weight: 600; margin: 10px 0; }
+        .option-card .price-range { background: white; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .option-card .price-range div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #e0e0e0; }
+        .option-card .price-range div:last-child { border-bottom: none; font-weight: 600; color: #0071e3; font-size: 1.1em; }
+        .option-card .pros { background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .option-card .pros h4 { color: #2e7d32; margin-bottom: 10px; }
+        .option-card .pros ul { list-style: none; }
+        .option-card .pros li::before { content: "✅ "; }
+        .option-card .cons { background: #ffebee; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .option-card .cons h4 { color: #c62828; margin-bottom: 10px; }
+        .option-card .cons ul { list-style: none; }
+        .option-card .cons li::before { content: "⚠️ "; }
+        .risk-section { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 35px; border-radius: 15px; margin: 30px 0; }
+        .risk-section h2 { margin-bottom: 20px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .risk-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; }
+        .risk-card h3 { font-size: 1.2em; margin-bottom: 10px; }
+        .risk-card ul { list-style: none; }
+        .risk-card li { padding: 5px 0; opacity: 0.9; }
+        .risk-card li::before { content: "⚠️ "; font-weight: bold; }
+        .checklist-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 35px; border-radius: 15px; margin: 30px 0; }
+        .checklist-section h2 { margin-bottom: 20px; }
+        .checklist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .checklist-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; }
+        .checklist-card h3 { font-size: 1.2em; margin-bottom: 15px; }
+        .checklist-card ul { list-style: none; }
+        .checklist-card li { padding: 8px 0; opacity: 0.9; }
+        .checklist-card li::before { content: "□ "; font-weight: bold; font-size: 1.2em; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+        .comparison-table th, .comparison-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        .comparison-table th { background: #f5f5f7; font-weight: 600; }
+        .comparison-table tr:hover { background: #fafafa; }
+        .comparison-table .best { background: #e8f5e9; font-weight: 600; }
+        .comparison-table .recommended { background: #fff3cd; }
+        .channel-card { background: #fff; border: 2px solid #e0e0e0; border-radius: 15px; padding: 25px; margin-bottom: 20px; transition: all 0.3s; }
+        .channel-card:hover { border-color: #667eea; box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2); }
+        .channel-card h3 { font-size: 1.4em; margin-bottom: 10px; color: #1d1d1f; }
+        .channel-card .rating { font-size: 1.5em; margin: 10px 0; }
+        .channel-card .rating span { color: #ffc107; }
+        .tips-section { background: #fff3cd; border-left: 5px solid #ffc107; padding: 25px; border-radius: 10px; margin: 30px 0; }
+        .tips-section h3 { color: #856404; margin-bottom: 15px; }
+        .tips-section ul { list-style: none; }
+        .tips-section li { padding: 8px 0; color: #856404; }
+        .tips-section li::before { content: "💡 "; }
+        .warranty-section { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 35px; border-radius: 15px; margin: 30px 0; }
+        .warranty-section h2 { margin-bottom: 20px; }
+        .warranty-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .warranty-card { background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; }
+        .warranty-card h4 { font-size: 1.1em; margin-bottom: 10px; }
+        footer { background: #1a1a2e; color: #a0aec0; text-align: center; padding: 25px; font-size: 0.9em; }
+        @media (max-width: 768px) { .container { border-radius: 0; } .content { padding: 20px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💻 二手 MacBook 购买建议</h1>
+            <p>开发者专用 | 16GB 内存 + 512GB 存储 | 跨平台开发</p>
+            <div style="margin-top: 15px;">
+                <span class="dev-badge">👨‍💻 轻度开发</span>
+                <span class="dev-badge">📱 跨平台 APP</span>
+                <span class="dev-badge">💾 16GB+512GB</span>
+            </div>
+            <div class="budget-badge">💰 预算：约 ¥5,000</div>
+            <div class="used-badge">♻️ 二手/官翻</div>
+            <p style="margin-top: 20px; font-size: 0.9em;">生成时间：2026-03-11 02:24</p>
+        </header>
+
+        <div class="content">
+            <!-- 二手优势 -->
+            <div class="recommendation-card">
+                <h2>♻️ 为什么选择二手 MacBook？</h2>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="label">价格优势</div>
+                        <div class="value">省 30-50%</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">保值率</div>
+                        <div class="value">Mac 很高</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">质量</div>
+                        <div class="value">耐用可靠</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">再出售</div>
+                        <div class="value">容易出手</div>
+                    </div>
+                </div>
+                <p style="margin-top: 20px;">
+                    <strong>核心理由:</strong> MacBook 质量可靠，二手市场成熟，¥5000 预算可以买到原价 ¥8000-10000 的机型，性价比极高！
+                </p>
+            </div>
+
+            <!-- 最佳推荐 -->
+            <div class="recommendation-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h2>🏆 二手最佳推荐：MacBook Pro 13" (M1, 2020)</h2>
+                <p style="font-size: 1.1em; opacity: 0.9;">16GB+512GB 配置，开发者首选</p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="label">处理器</div>
+                        <div class="value">M1</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">内存</div>
+                        <div class="value">16GB</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">存储</div>
+                        <div class="value">512GB</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">屏幕</div>
+                        <div class="value">13.3"</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">接口</div>
+                        <div class="value">2×雷雳</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">续航</div>
+                        <div class="value">17 小时</div>
+                    </div>
+                </div>
+                <div class="price">
+                    <span class="original-price">新机 ¥11,498</span>
+                    二手 ¥4,500-5,500
+                </div>
+                <div class="savings">💰 比新机省 ¥6,000-7,000 (约 55-60%)</div>
+                <p style="margin-top: 20px;">
+                    <strong>推荐理由:</strong> M1 芯片是 Apple 自研第一代，性能依然强劲，16GB 内存满足开发需求，Pro 系列有主动散热，长时间编译不降频，二手价格已经非常合理
+                </p>
+            </div>
+
+            <!-- 性价比推荐 -->
+            <div class="recommendation-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                <h2>⭐ 性价比首选：MacBook Air 13" (M1, 2020)</h2>
+                <p style="font-size: 1.1em; opacity: 0.9;">16GB+512GB 配置，预算内最佳</p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="label">处理器</div>
+                        <div class="value">M1</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">内存</div>
+                        <div class="value">16GB</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">存储</div>
+                        <div class="value">512GB</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">屏幕</div>
+                        <div class="value">13.3"</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">接口</div>
+                        <div class="value">2×雷雳</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">续航</div>
+                        <div class="value">18 小时</div>
+                    </div>
+                </div>
+                <div class="price">
+                    <span class="original-price">新机 ¥9,498</span>
+                    二手 ¥3,800-4,800
+                </div>
+                <div class="savings">💰 比新机省 ¥5,000-6,000 (约 50-60%)</div>
+                <p style="margin-top: 20px;">
+                    <strong>推荐理由:</strong> M1 Air 是性价比之王，无风扇完全静音，续航优秀，16GB+512GB 满足轻度开发，价格最接近预算
+                </p>
+            </div>
+
+            <!-- 二手型号对比 -->
+            <h2 style="margin: 30px 0 20px 0; color: #1d1d1f;">📊 二手 MacBook 型号对比 (16GB+512GB)</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>型号</th>
+                        <th>发布年份</th>
+                        <th>二手价格</th>
+                        <th>原价</th>
+                        <th>节省</th>
+                        <th>开发适合度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="best">
+                        <td><strong>MacBook Air 13" M1</strong><br><span style="font-size: 0.8em; color: #666;">16GB+512GB</span></td>
+                        <td>2020</td>
+                        <td><strong>¥3,800-4,800</strong></td>
+                        <td>¥9,498</td>
+                        <td>¥5,000-6,000</td>
+                        <td>🏆 预算内最佳</td>
+                    </tr>
+                    <tr class="recommended">
+                        <td><strong>MacBook Pro 13" M1</strong><br><span style="font-size: 0.8em; color: #666;">16GB+512GB</span></td>
+                        <td>2020</td>
+                        <td><strong>¥4,500-5,500</strong></td>
+                        <td>¥11,498</td>
+                        <td>¥6,000-7,000</td>
+                        <td>⭐⭐⭐⭐⭐ 开发首选</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MacBook Air 13" M2</strong><br><span style="font-size: 0.8em; color: #666;">16GB+512GB</span></td>
+                        <td>2022</td>
+                        <td>¥5,500-6,500</td>
+                        <td>¥10,998</td>
+                        <td>¥4,500-5,500</td>
+                        <td>⭐⭐⭐⭐ 新款</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MacBook Pro 13" M2</strong><br><span style="font-size: 0.8em; color: #666;">16GB+512GB</span></td>
+                        <td>2022</td>
+                        <td>¥6,000-7,000</td>
+                        <td>¥13,498</td>
+                        <td>¥6,500-7,500</td>
+                        <td>⭐⭐⭐⭐ 性能更好</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MacBook Pro 14" M1 Pro</strong><br><span style="font-size: 0.8em; color: #666;">16GB+512GB</span></td>
+                        <td>2021</td>
+                        <td>¥7,000-8,500</td>
+                        <td>¥15,999</td>
+                        <td>¥7,500-9,000</td>
+                        <td>⭐⭐⭐⭐⭐ 专业级 (超预算)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 详细方案 -->
+            <div class="option-card">
+                <h3>🥇 方案一：MacBook Pro 13" (M1, 2020, 16GB, 512GB) - 开发首选</h3>
+                <div class="price-tag">二手价格：¥4,500-5,500</div>
+                <div class="price-range">
+                    <div><span>当年原价:</span> <span>¥11,498</span></div>
+                    <div><span>二手行情 (9 成新):</span> <span>¥5,000-5,500</span></div>
+                    <div><span>二手行情 (8 成新):</span> <span>¥4,500-5,000</span></div>
+                    <div><span>比新机节省:</span> <span>¥6,000-7,000 (55-60%)</span></div>
+                </div>
+                <div class="pros">
+                    <h4>✅ 优点 (针对开发)</h4>
+                    <ul>
+                        <li>M1 芯片性能强劲，轻度开发流畅</li>
+                        <li>16GB 内存可运行 Xcode + Android Studio + 模拟器</li>
+                        <li>512GB 存储足够安装开发工具和 SDK</li>
+                        <li>Pro 系列有主动散热 (风扇)，长时间编译不降频</li>
+                        <li>Touch Bar (可选)，一些开发工具支持快捷操作</li>
+                        <li>屏幕亮度 500 尼特 (比 Air 的 400 尼特亮)</li>
+                        <li>保值率高，后续转手容易</li>
+                        <li>价格接近预算 (¥5000)</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ 二手风险</h4>
+                    <ul>
+                        <li>电池可能有损耗 (检查循环次数)</li>
+                        <li>屏幕可能有划痕/坏点</li>
+                        <li>键盘可能有磨损 (蝶式键盘已改进)</li>
+                        <li>无官方保修 (或保修期短)</li>
+                        <li>需要仔细验机</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 20px;">
+                    <strong>📋 开发适用性:</strong> 轻度开发 ✅ | 中度开发 ✅ | 重度开发 ⚠️ | 专业开发 ❌
+                </div>
+            </div>
+
+            <div class="option-card">
+                <h3>🥈 方案二：MacBook Air 13" (M1, 2020, 16GB, 512GB) - 预算内最佳</h3>
+                <div class="price-tag">二手价格：¥3,800-4,800</div>
+                <div class="price-range">
+                    <div><span>当年原价:</span> <span>¥9,498</span></div>
+                    <div><span>二手行情 (9 成新):</span> <span>¥4,300-4,800</span></div>
+                    <div><span>二手行情 (8 成新):</span> <span>¥3,800-4,300</span></div>
+                    <div><span>比新机节省:</span> <span>¥5,000-6,000 (50-60%)</span></div>
+                </div>
+                <div class="pros">
+                    <h4>✅ 优点 (针对开发)</h4>
+                    <ul>
+                        <li>M1 芯片性能足够轻度开发</li>
+                        <li>16GB 内存满足基本开发需求</li>
+                        <li>512GB 存储够用</li>
+                        <li>无风扇设计，完全静音</li>
+                        <li>续航优秀，18 小时</li>
+                        <li>重量轻 (1.29kg)，便携性好</li>
+                        <li>价格最接近预算 (¥4000 左右)</li>
+                        <li>保值率高</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ 二手风险</h4>
+                    <ul>
+                        <li>电池可能有损耗</li>
+                        <li>屏幕可能有划痕</li>
+                        <li>仅 2 个雷雳端口</li>
+                        <li>无主动散热 (长时间编译可能降频)</li>
+                        <li>需要仔细验机</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 20px;">
+                    <strong>📋 开发适用性:</strong> 轻度开发 ✅ | 中度开发 ⚠️ | 重度开发 ❌ | 专业开发 ❌
+                </div>
+            </div>
+
+            <div class="option-card">
+                <h3>🥉 方案三：Apple 官方翻新 MacBook Air 13" (M2, 2022, 16GB, 512GB)</h3>
+                <div class="price-tag">官翻价格：¥7,500-8,500 (估算)</div>
+                <div class="price-range">
+                    <div><span>新机原价:</span> <span>¥10,998</span></div>
+                    <div><span>官翻折扣:</span> <span>约 85 折</span></div>
+                    <div><span>官翻价格:</span> <span>¥7,500-8,500 (估算)</span></div>
+                    <div><span>比新机节省:</span> <span>¥2,500-3,500 (约 15%)</span></div>
+                </div>
+                <div class="pros">
+                    <h4>✅ 优点</h4>
+                    <ul>
+                        <li>Apple 官方翻新，质量有保障</li>
+                        <li>享受与新机相同的 1 年保修</li>
+                        <li>经过 Apple 严格检测和翻新</li>
+                        <li>可能配备新电池和新外壳</li>
+                        <li>M2 芯片比 M1 性能提升约 18%</li>
+                        <li>全新设计 (MagSafe + 刘海屏)</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ 缺点</h4>
+                    <ul>
+                        <li>价格超预算约 ¥2,500-3,500</li>
+                        <li>国行官翻库存不稳定</li>
+                        <li>配置选择有限</li>
+                        <li>需要经常查看官网</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 20px;">
+                    <strong>📋 购买渠道:</strong> <a href="https://www.apple.com.cn/shop/special-deals/mac" target="_blank" style="color: #0071e3;">Apple 官网翻新专区</a>
+                </div>
+            </div>
+
+            <!-- 二手风险 -->
+            <div class="risk-section">
+                <h2>⚠️ 二手 MacBook 风险提示</h2>
+                <div class="risk-grid">
+                    <div class="risk-card">
+                        <h3>🔋 电池损耗</h3>
+                        <ul>
+                            <li>检查电池循环次数</li>
+                            <li>检查电池健康度</li>
+                            <li>循环>500 次建议更换</li>
+                            <li>更换电池约 ¥1,000-1,500</li>
+                        </ul>
+                    </div>
+                    <div class="risk-card">
+                        <h3>🖥️ 屏幕问题</h3>
+                        <ul>
+                            <li>检查划痕/磕碰</li>
+                            <li>检查坏点/亮点</li>
+                            <li>检查涂层脱落</li>
+                            <li>检查 Flexgate (背光问题)</li>
+                        </ul>
+                    </div>
+                    <div class="risk-card">
+                        <h3>⌨️ 键盘问题</h3>
+                        <ul>
+                            <li>检查每个按键</li>
+                            <li>蝶式键盘易出问题</li>
+                            <li>2020 款已改进</li>
+                            <li>更换键盘约 ¥2,000-3,000</li>
+                        </ul>
+                    </div>
+                    <div class="risk-card">
+                        <h3>🔒 激活锁</h3>
+                        <ul>
+                            <li>确认无 iCloud 激活锁</li>
+                    <li>确认无企业锁/MDM 锁</li>
+                            <li>要求卖家退出所有账户</li>
+                            <li>重置后重新激活测试</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 验机清单 -->
+            <div class="checklist-section">
+                <h2>✅ 二手 MacBook 验机清单</h2>
+                <div class="checklist-grid">
+                    <div class="checklist-card">
+                        <h3>📋 外观检查</h3>
+                        <ul>
+                            <li>检查外壳划痕/磕碰</li>
+                            <li>检查屏幕划痕/坏点</li>
+                            <li>检查接口是否完好</li>
+                            <li>检查螺丝是否完整</li>
+                            <li>检查序列号是否匹配</li>
+                        </ul>
+                    </div>
+                    <div class="checklist-card">
+                        <h3>⚡ 功能测试</h3>
+                        <ul>
+                            <li>测试所有按键</li>
+                            <li>测试触控板</li>
+                            <li>测试所有接口</li>
+                            <li>测试摄像头</li>
+                            <li>测试扬声器/麦克风</li>
+                            <li>测试 Wi-Fi/蓝牙</li>
+                        </ul>
+                    </div>
+                    <div class="checklist-card">
+                        <h3>🔋 电池检查</h3>
+                        <ul>
+                            <li>查看电池循环次数</li>
+                            <li>查看电池健康度</li>
+                            <li>测试充电是否正常</li>
+                            <li>测试续航是否达标</li>
+                            <li>循环<300 次为佳</li>
+                        </ul>
+                    </div>
+                    <div class="checklist-card">
+                        <h3>💾 系统检查</h3>
+                        <ul>
+                            <li>检查序列号 (官网查询)</li>
+                            <li>检查保修状态</li>
+                            <li>检查是否有激活锁</li>
+                            <li>检查是否有 MDM 锁</li>
+                            <li>重置系统测试</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 购买渠道 -->
+            <h2 style="margin: 30px 0 20px 0; color: #1d1d1f;">🛒 二手购买渠道对比</h2>
+            
+            <div class="channel-card">
+                <h3>🥇 Apple 官网翻新</h3>
+                <div class="rating">推荐度：<span>⭐⭐⭐⭐⭐</span></div>
+                <p><strong>价格:</strong> 新机 85 折左右</p>
+                <p><strong>保修:</strong> 1 年官方保修 (可买 AppleCare+)</p>
+                <p><strong>优点:</strong> 官方质量保障、全新电池/外壳、7 天无理由退货</p>
+                <p><strong>缺点:</strong> 库存不稳定、配置选择少、折扣力度一般</p>
+                <p><strong>适合:</strong> 追求安心、预算充足</p>
+                <a href="https://www.apple.com.cn/shop/special-deals/mac" class="buy-link" target="_blank">查看官翻 Mac →</a>
+            </div>
+
+            <div class="channel-card">
+                <h3>🥈 京东拍拍/爱回收</h3>
+                <div class="rating">推荐度：<span>⭐⭐⭐⭐</span></div>
+                <p><strong>价格:</strong> 市场价，透明</p>
+                <p><strong>保修:</strong> 平台保修 (通常 180 天 -1 年)</p>
+                <p><strong>优点:</strong> 平台验机、质量有保障、售后好、支持分期</p>
+                <p><strong>缺点:</strong> 价格略高、成色定义模糊</p>
+                <p><strong>适合:</strong> 追求省心、有一定预算</p>
+            </div>
+
+            <div class="channel-card">
+                <h3>🥉 闲鱼/转转 (个人卖家)</h3>
+                <div class="rating">推荐度：<span>⭐⭐⭐</span></div>
+                <p><strong>价格:</strong> 最低，可议价</p>
+                <p><strong>保修:</strong> 无保修 (或卖家自保)</p>
+                <p><strong>优点:</strong> 价格最低、选择最多、可面交验机</p>
+                <p><strong>缺点:</strong> 风险最高、需自行验机、售后无保障</p>
+                <p><strong>适合:</strong> 懂行、会验机、预算紧张</p>
+                <p><strong>建议:</strong> 选择信用极好、有交易记录、支持验货宝的卖家</p>
+            </div>
+
+            <div class="channel-card">
+                <h3>本地电脑城/二手店</h3>
+                <div class="rating">推荐度：<span>⭐⭐</span></div>
+                <p><strong>价格:</strong> 中等，可议价</p>
+                <p><strong>保修:</strong> 店保 (通常 30-90 天)</p>
+                <p><strong>优点:</strong> 可现场验机、即时提货、可议价</p>
+                <p><strong>缺点:</strong> 质量参差不齐、售后可能扯皮、水深</p>
+                <p><strong>适合:</strong> 懂行、能砍价、本地有靠谱店铺</p>
+                <p><strong>建议:</strong> 不推荐新手选择</p>
+            </div>
+
+            <!-- 购买建议 -->
+            <div class="tips-section">
+                <h3>💡 二手 MacBook 购买建议</h3>
+                <ul>
+                    <li><strong>优先选择:</strong> Apple 官翻 > 京东拍拍 > 闲鱼 (信用极好) > 本地店</li>
+                    <li><strong>必查项目:</strong> 序列号、电池循环、激活锁、屏幕、键盘</li>
+                    <li><strong>电池循环:</strong> <300 次为佳，>500 次需考虑更换成本</li>
+                    <li><strong>保修状态:</strong> 在保机器更安心，可官网查询</li>
+                    <li><strong>面交建议:</strong> 约在苹果店附近，可当场验机</li>
+                    <li><strong>付款方式:</strong> 闲鱼走平台，不要微信/支付宝直转</li>
+                    <li><strong>退换政策:</strong> 确认是否支持 7 天无理由/验货宝</li>
+                    <li><strong>价格参考:</strong> 多对比几个平台，了解市场行情</li>
+                    <li><strong>配件检查:</strong> 确认充电器、原装线是否齐全</li>
+                    <li><strong>数据清除:</strong> 收到后立刻重置系统，检查是否有隐藏锁</li>
+                </ul>
+            </div>
+
+            <!-- 开发建议 -->
+            <div class="tips-section" style="background: #e3f2fd; border-left-color: #1976d2;">
+                <h3 style="color: #1565c0;">💻 开发者特别建议</h3>
+                <ul>
+                    <li><strong>内存优先:</strong> 16GB 是开发最低要求，8GB 绝对不够！</li>
+                    <li><strong>存储建议:</strong> 512GB 起步，Xcode+SDK 很大，二手可外接 SSD</li>
+                    <li><strong>Pro vs Air:</strong> 开发建议 Pro (有风扇，长时间编译不降频)</li>
+                    <li><strong>M1 vs M2:</strong> M1 性价比更高，M2 提升有限但贵很多</li>
+                    <li><strong>验机重点:</strong> 跑分测试 (Geekbench)、压力测试 (编译大项目)</li>
+                    <li><strong>预算分配:</strong> 预留 ¥500-1000 用于配件 (扩展坞、外接 SSD 等)</li>
+                    <li><strong>AppleCare+:</strong> 二手无法购买，需自行承担维修风险</li>
+                </ul>
+            </div>
+
+            <!-- 最终推荐 -->
+            <div class="recommendation-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <h2>🎯 最终推荐</h2>
+                <p style="font-size: 1.2em; margin: 20px 0;">
+                    <strong>MacBook Pro 13" (M1, 2020, 16GB, 512GB)</strong>
+                </p>
+                <p style="font-size: 1.5em; font-weight: 700; margin: 20px 0;">
+                    💰 二手 ¥4,500-5,500
+                </p>
+                <p style="margin: 20px 0;">
+                    <strong>推荐渠道:</strong> Apple 官网翻新 / 京东拍拍<br>
+                    <strong>备选渠道:</strong> 闲鱼 (信用极好卖家)<br>
+                    <strong>预计省:</strong> ¥6,000-7,000 (vs 新机)<br>
+                    <strong>电池要求:</strong> 循环<300 次，健康度>85%<br>
+                    <strong>保修要求:</strong> 在保优先，或平台保修
+                </p>
+                <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.9;">
+                    <strong>预算内备选:</strong> MacBook Air 13" (M1, 2020, 16GB, 512GB) 二手 ¥3,800-4,800
+                </p>
+                <a href="https://www.apple.com.cn/shop/special-deals/mac" class="buy-link" target="_blank">查看 Apple 官翻 →</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>📊 价格数据来源：闲鱼/转转/京东拍拍 行情 | 生成时间：2026-03-11 02:24</p>
+            <p style="margin-top: 10px;">⚠️ 二手价格波动较大，请以实际行情为准</p>
+            <p style="margin-top: 10px;">🔗 报告来源：<a href="https://gibo-chun.github.io/Resarch_Report/" target="_blank" style="color: #4da6ff;">gibo-chun.github.io/Resarch_Report</a></p>
+        </footer>
+    </div>
+</body>
+</html>
