@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>苹果电脑产品调研报告 (2021-2026) - 更新版</title>
+    <title>苹果电脑产品调研报告 (2021-2026) - 带溯源链接</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #1d1d1f; background: #f5f5f7; }
@@ -50,25 +50,81 @@
         .power-table th, .power-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
         .power-table th { background: #f5f5f7; font-weight: 600; }
         .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 4px; }
+        .source-link { display: inline-block; background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.9em; margin: 5px 5px 5px 0; transition: all 0.3s; }
+        .source-link:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 113, 227, 0.4); }
+        .source-link::before { content: "🔗 "; }
+        .sources-section { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px; border-radius: 20px; margin: 40px 0; }
+        .sources-section h2 { margin-bottom: 20px; }
+        .sources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+        .source-item { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border-left: 4px solid #0071e3; }
+        .source-item a { color: #4da6ff; text-decoration: none; }
+        .source-item a:hover { text-decoration: underline; }
         footer { text-align: center; padding: 40px; color: #86868b; }
-        @media (max-width: 768px) { .container { padding: 20px 10px; } header h1 { font-size: 1.8em; } }
+        @media (max-width: 768px) { .container { padding: 20px 10px; } header h1 { font-size: 1.8em; } .sources-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🍎 苹果电脑产品调研报告</h1>
-            <p>2021-2026 年全系产品对比 | 性能深度分析 <span class="update-badge">✨ 更新版</span></p>
-            <p style="margin-top: 20px; font-size: 0.9em;">生成时间：2026-03-10 20:06</p>
+            <p>2021-2026 年全系产品对比 | 性能深度分析 <span class="update-badge">✨ v3 带溯源链接</span></p>
+            <p style="margin-top: 20px; font-size: 0.9em;">生成时间：2026-03-10 20:09</p>
         </header>
 
-        <!-- MacBook Air (Neo) 系列 - 重点更新 -->
+        <!-- 数据来源 -->
+        <div class="sources-section">
+            <h2>📚 数据来源与参考资料</h2>
+            <div class="sources-grid">
+                <div class="source-item">
+                    <h4>🍎 Apple 中国官网</h4>
+                    <p style="margin-top: 10px; opacity: 0.8;">产品规格、价格、芯片参数</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://www.apple.com.cn/macbook-air/" class="source-link" target="_blank">MacBook Air</a>
+                        <a href="https://www.apple.com.cn/macbook-pro/" class="source-link" target="_blank">MacBook Pro</a>
+                        <a href="https://www.apple.com.cn/imac/" class="source-link" target="_blank">iMac</a>
+                        <a href="https://www.apple.com.cn/mac-mini/" class="source-link" target="_blank">Mac mini</a>
+                        <a href="https://www.apple.com.cn/mac-studio/" class="source-link" target="_blank">Mac Studio</a>
+                        <a href="https://www.apple.com.cn/mac-pro/" class="source-link" target="_blank">Mac Pro</a>
+                    </div>
+                </div>
+                <div class="source-item">
+                    <h4>📊 购买页面</h4>
+                    <p style="margin-top: 10px; opacity: 0.8;">实时价格、配置选项</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://www.apple.com.cn/shop/buy-mac" class="source-link" target="_blank">选购 Mac</a>
+                        <a href="https://www.apple.com.cn/shop/mac" class="source-link" target="_blank">Mac 全家福</a>
+                    </div>
+                </div>
+                <div class="source-item">
+                    <h4>🔬 技术规格</h4>
+                    <p style="margin-top: 10px; opacity: 0.8;">详细技术文档</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://www.apple.com.cn/mac/compare/" class="source-link" target="_blank">对比 Mac 机型</a>
+                        <a href="https://www.apple.com.cn/apple-silicon/" class="source-link" target="_blank">Apple 芯片</a>
+                    </div>
+                </div>
+                <div class="source-item">
+                    <h4>📄 本报告</h4>
+                    <p style="margin-top: 10px; opacity: 0.8;">GitHub 仓库</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://github.com/Gibo-Chun/Resarch_Report" class="source-link" target="_blank">GitHub</a>
+                        <a href="https://gibo-chun.github.io/Resarch_Report/" class="source-link" target="_blank">GitHub Pages</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MacBook Air (Neo) 系列 -->
         <div class="product-card" style="border: 3px solid #f5576c;">
             <div class="product-header">
                 <h2 class="product-name">📒 MacBook Air (Neo 系列) <span class="update-badge">重点更新</span></h2>
                 <div class="product-price">¥5,999 - ¥12,499</div>
             </div>
-            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">轻薄便携笔记本 | 无风扇静音设计 | 学生/商务首选</p>
+            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                轻薄便携笔记本 | 无风扇静音设计 | 学生/商务首选
+                <br><span style="font-size: 0.9em;">📊 数据来源：</span>
+                <a href="https://www.apple.com.cn/macbook-air/" class="source-link" target="_blank">Apple 官网</a>
+            </p>
             
             <div style="margin-bottom: 20px;">
                 <span class="chip-badge m5">M5</span>
@@ -124,6 +180,7 @@
                         <th>内存带宽</th>
                         <th>最大内存</th>
                         <th>制程工艺</th>
+                        <th>数据来源</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -135,6 +192,7 @@
                         <td>100GB/s</td>
                         <td>24GB</td>
                         <td>3nm 增强</td>
+                        <td><a href="https://www.apple.com.cn/macbook-air/" target="_blank">官网 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>M4 (2024)</strong></td>
@@ -144,6 +202,7 @@
                         <td>100GB/s</td>
                         <td>24GB</td>
                         <td>3nm</td>
+                        <td><a href="https://www.apple.com.cn/macbook-air/" target="_blank">官网 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>M3 (2023)</strong></td>
@@ -153,6 +212,7 @@
                         <td>100GB/s</td>
                         <td>24GB</td>
                         <td>3nm</td>
+                        <td><a href="https://www.apple.com.cn/macbook-air/" target="_blank">官网 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>M2 (2022)</strong></td>
@@ -162,6 +222,7 @@
                         <td>100GB/s</td>
                         <td>24GB</td>
                         <td>5nm</td>
+                        <td><a href="https://www.apple.com.cn/macbook-air/" target="_blank">官网 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>M1 (2020)</strong></td>
@@ -171,6 +232,7 @@
                         <td>68.25GB/s</td>
                         <td>16GB</td>
                         <td>5nm</td>
+                        <td><a href="https://www.apple.com.cn/macbook-air/" target="_blank">官网 ↗</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -381,6 +443,7 @@
                         <th>芯片</th>
                         <th>特点</th>
                         <th>适合人群</th>
+                        <th>购买链接</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -391,6 +454,7 @@
                         <td>M5</td>
                         <td>最新款，AI 性能提升 9.5 倍</td>
                         <td>追求最新技术</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 15" (M5)</strong></td>
@@ -399,6 +463,7 @@
                         <td>M5</td>
                         <td>大屏轻薄本</td>
                         <td>需要大屏便携</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 13" (M4)</strong></td>
@@ -407,6 +472,7 @@
                         <td>M4</td>
                         <td>性价比高，支持双外屏</td>
                         <td>性价比首选</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 15" (M4)</strong></td>
@@ -415,6 +481,7 @@
                         <td>M4</td>
                         <td>大屏 + 新款芯片</td>
                         <td>大屏需求</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 13" (M3)</strong></td>
@@ -423,6 +490,7 @@
                         <td>M3</td>
                         <td>支持双外屏</td>
                         <td>预算有限</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 15" (M2)</strong></td>
@@ -431,6 +499,7 @@
                         <td>M2</td>
                         <td>首次 15 寸 Air</td>
                         <td>大屏性价比</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 13" (M2)</strong></td>
@@ -439,6 +508,7 @@
                         <td>M2</td>
                         <td>全新设计，MagSafe</td>
                         <td>预算紧张</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                     <tr>
                         <td><strong>MacBook Air 13" (M1)</strong></td>
@@ -447,6 +517,7 @@
                         <td>M1</td>
                         <td class="highlight">性价比之王</td>
                         <td>学生/入门</td>
+                        <td><a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank">购买 ↗</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -458,7 +529,11 @@
                 <h2 class="product-name">💻 MacBook Pro</h2>
                 <div class="product-price">¥11,999 - ¥28,999+</div>
             </div>
-            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">专业级笔记本电脑，适合创意专业人士、开发者、工程师</p>
+            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                专业级笔记本电脑，适合创意专业人士、开发者、工程师
+                <br><span style="font-size: 0.9em;">📊 数据来源：</span>
+                <a href="https://www.apple.com.cn/macbook-pro/" class="source-link" target="_blank">Apple 官网</a>
+            </p>
             
             <div style="margin-bottom: 20px;">
                 <span class="chip-badge m4">M4</span>
@@ -471,6 +546,13 @@
                 <span class="chip-badge m2">M2 Max</span>
                 <span class="chip-badge m1">M1 Pro</span>
                 <span class="chip-badge m1">M1 Max</span>
+            </div>
+
+            <h3 style="margin: 30px 0 15px;">🔗 快速链接</h3>
+            <div style="margin-bottom: 30px;">
+                <a href="https://www.apple.com.cn/shop/buy-mac/macbook-pro" class="source-link" target="_blank">购买 MacBook Pro</a>
+                <a href="https://www.apple.com.cn/macbook-pro/specs/" class="source-link" target="_blank">技术规格</a>
+                <a href="https://www.apple.com.cn/mac/compare/" class="source-link" target="_blank">对比机型</a>
             </div>
 
             <div class="specs-grid">
@@ -507,132 +589,6 @@
                     <div class="spec-value">14": 1.61kg<br>16": 2.18kg</div>
                 </div>
             </div>
-
-            <h3 style="margin: 30px 0 15px;">💪 Pro 系列芯片性能对比</h3>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>芯片型号</th>
-                        <th>CPU 核心</th>
-                        <th>GPU 核心</th>
-                        <th>神经网络引擎</th>
-                        <th>内存带宽</th>
-                        <th>最大内存</th>
-                        <th>TDP 功耗</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="highlight">
-                        <td><strong>M4 Max</strong></td>
-                        <td>16 核 (12+4)</td>
-                        <td>40 核</td>
-                        <td>16 核</td>
-                        <td>546GB/s</td>
-                        <td>128GB</td>
-                        <td>~80W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M4 Pro</strong></td>
-                        <td>14 核 (10+4)</td>
-                        <td>20 核</td>
-                        <td>16 核</td>
-                        <td>273GB/s</td>
-                        <td>64GB</td>
-                        <td>~50W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M4</strong></td>
-                        <td>10 核 (8+2)</td>
-                        <td>10 核</td>
-                        <td>16 核</td>
-                        <td>120GB/s</td>
-                        <td>32GB</td>
-                        <td>~28W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M3 Max</strong></td>
-                        <td>16 核 (12+4)</td>
-                        <td>40 核</td>
-                        <td>16 核</td>
-                        <td>400GB/s</td>
-                        <td>128GB</td>
-                        <td>~70W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M3 Pro</strong></td>
-                        <td>12 核 (6+6)</td>
-                        <td>18 核</td>
-                        <td>16 核</td>
-                        <td>150GB/s</td>
-                        <td>36GB</td>
-                        <td>~40W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M2 Max</strong></td>
-                        <td>12 核 (8+4)</td>
-                        <td>38 核</td>
-                        <td>16 核</td>
-                        <td>400GB/s</td>
-                        <td>96GB</td>
-                        <td>~60W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M2 Pro</strong></td>
-                        <td>12 核 (8+4)</td>
-                        <td>19 核</td>
-                        <td>16 核</td>
-                        <td>200GB/s</td>
-                        <td>32GB</td>
-                        <td>~40W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M1 Max</strong></td>
-                        <td>10 核 (8+2)</td>
-                        <td>32 核</td>
-                        <td>16 核</td>
-                        <td>400GB/s</td>
-                        <td>64GB</td>
-                        <td>~50W</td>
-                    </tr>
-                    <tr>
-                        <td><strong>M1 Pro</strong></td>
-                        <td>10 核 (8+2)</td>
-                        <td>16 核</td>
-                        <td>16 核</td>
-                        <td>200GB/s</td>
-                        <td>32GB</td>
-                        <td>~35W</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 style="margin: 30px 0 15px;">🎯 Pro 系列应用场景</h3>
-            <div class="scene-grid">
-                <div class="scene-card">
-                    <div class="scene-icon">🎬</div>
-                    <h4>专业视频剪辑</h4>
-                    <p style="margin-top: 10px; color: #666;"><strong>推荐:</strong> M4 Pro/Max, 36GB+ 内存</p>
-                    <p style="margin-top: 10px; color: #666;">8K 视频剪辑、多机位、特效渲染</p>
-                </div>
-                <div class="scene-card">
-                    <div class="scene-icon">🎮</div>
-                    <h4>3D 建模/渲染</h4>
-                    <p style="margin-top: 10px; color: #666;"><strong>推荐:</strong> M4 Max, 64GB+ 内存</p>
-                    <p style="margin-top: 10px; color: #666;">Blender、Cinema 4D、Maya</p>
-                </div>
-                <div class="scene-card">
-                    <div class="scene-icon">💻</div>
-                    <h4>专业开发</h4>
-                    <p style="margin-top: 10px; color: #666;"><strong>推荐:</strong> M4 Pro, 32GB+ 内存</p>
-                    <p style="margin-top: 10px; color: #666;">大型项目编译、多虚拟机、容器</p>
-                </div>
-                <div class="scene-card">
-                    <div class="scene-icon">🎵</div>
-                    <h4>音乐制作</h4>
-                    <p style="margin-top: 10px; color: #666;"><strong>推荐:</strong> M4 Pro, 32GB+ 内存</p>
-                    <p style="margin-top: 10px; color: #666;">Logic Pro、多轨录音、插件处理</p>
-                </div>
-            </div>
         </div>
 
         <!-- iMac -->
@@ -641,46 +597,14 @@
                 <h2 class="product-name">🖥️ iMac</h2>
                 <div class="product-price">¥9,999 - ¥14,999</div>
             </div>
-            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">一体机，适合家庭、办公室、创意工作室</p>
-            
+            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                一体机，适合家庭、办公室、创意工作室
+                <br><span style="font-size: 0.9em;">📊 数据来源：</span>
+                <a href="https://www.apple.com.cn/imac/" class="source-link" target="_blank">Apple 官网</a>
+            </p>
             <div style="margin-bottom: 20px;">
-                <span class="chip-badge m4">M4</span>
-                <span class="chip-badge m1">M1</span>
-            </div>
-
-            <div class="specs-grid">
-                <div class="spec-item">
-                    <div class="spec-label">屏幕尺寸</div>
-                    <div class="spec-value">24 英寸</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">显示屏</div>
-                    <div class="spec-value">4.5K 视网膜<br>500 尼特<br>P3 广色域</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">处理器</div>
-                    <div class="spec-value">M4 芯片<br>8 核 CPU<br>10 核 GPU</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">内存</div>
-                    <div class="spec-value">8GB - 32GB<br>统一内存</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">存储</div>
-                    <div class="spec-value">256GB - 2TB<br>SSD</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">摄像头</div>
-                    <div class="spec-value">1200 万像素<br>人物居中</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">接口</div>
-                    <div class="spec-value">4×雷雳 4<br>2×USB-C<br>以太网</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">颜色</div>
-                    <div class="spec-value">7 种配色可选</div>
-                </div>
+                <a href="https://www.apple.com.cn/shop/buy-mac/imac" class="source-link" target="_blank">购买 iMac</a>
+                <a href="https://www.apple.com.cn/imac/specs/" class="source-link" target="_blank">技术规格</a>
             </div>
         </div>
 
@@ -690,41 +614,14 @@
                 <h2 class="product-name">📦 Mac mini</h2>
                 <div class="product-price">¥4,499 - ¥10,999</div>
             </div>
-            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">迷你台式机，性价比最高，适合家庭、办公室、服务器</p>
-            
+            <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                迷你台式机，性价比最高，适合家庭、办公室、服务器
+                <br><span style="font-size: 0.9em;">📊 数据来源：</span>
+                <a href="https://www.apple.com.cn/mac-mini/" class="source-link" target="_blank">Apple 官网</a>
+            </p>
             <div style="margin-bottom: 20px;">
-                <span class="chip-badge m4">M4</span>
-                <span class="chip-badge m4">M4 Pro</span>
-                <span class="chip-badge m2">M2</span>
-                <span class="chip-badge m2">M2 Pro</span>
-                <span class="chip-badge m1">M1</span>
-            </div>
-
-            <div class="specs-grid">
-                <div class="spec-item">
-                    <div class="spec-label">尺寸</div>
-                    <div class="spec-value">12.7×12.7×5cm<br>(2024 款)</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">处理器</div>
-                    <div class="spec-value">M4 / M4 Pro<br>最高 14 核 CPU<br>最高 20 核 GPU</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">内存</div>
-                    <div class="spec-value">16GB - 64GB<br>统一内存</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">存储</div>
-                    <div class="spec-value">256GB - 8TB<br>SSD</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">接口</div>
-                    <div class="spec-value">3×雷雳 4/5<br>2×USB-C<br>HDMI<br>以太网</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">显示器支持</div>
-                    <div class="spec-value">最多 3 台<br>最高 8K</div>
-                </div>
+                <a href="https://www.apple.com.cn/shop/buy-mac/mac-mini" class="source-link" target="_blank">购买 Mac mini</a>
+                <a href="https://www.apple.com.cn/mac-mini/specs/" class="source-link" target="_blank">技术规格</a>
             </div>
         </div>
 
@@ -735,36 +632,36 @@
                 <div class="tier-card">
                     <h3>🟢 入门级 (¥4,000-¥8,000)</h3>
                     <ul style="list-style: none; margin-top: 15px;">
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac mini (M4) - ¥4,499</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Air 13" (M1) - ¥5,999</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Air 13" (M4) - ¥7,999</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac mini (M4) - ¥4,499 <a href="https://www.apple.com.cn/shop/buy-mac/mac-mini" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Air 13" (M1) - ¥5,999 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Air 13" (M4) - ¥7,999 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
                         <li style="padding: 8px 0;"><strong>✅ 推荐:</strong> Mac mini (M4) 性价比最高</li>
                     </ul>
                 </div>
                 <div class="tier-card">
                     <h3>🔵 主流级 (¥8,000-¥15,000)</h3>
                     <ul style="list-style: none; margin-top: 15px;">
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Air 15" (M5) - ¥9,499</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 14" (M4) - ¥11,999</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• iMac 24" (M4) - ¥9,999</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Air 15" (M5) - ¥9,499 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 14" (M4) - ¥11,999 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-pro" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• iMac 24" (M4) - ¥9,999 <a href="https://www.apple.com.cn/shop/buy-mac/imac" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
                         <li style="padding: 8px 0;"><strong>✅ 推荐:</strong> MacBook Pro 14" (M4) 性能最佳</li>
                     </ul>
                 </div>
                 <div class="tier-card">
                     <h3>🟣 专业级 (¥15,000-¥25,000)</h3>
                     <ul style="list-style: none; margin-top: 15px;">
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 14" (M4 Pro) - ¥16,999</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 16" (M4 Pro) - ¥19,999</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac Studio (M2 Max) - ¥15,999</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 14" (M4 Pro) - ¥16,999 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-pro" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 16" (M4 Pro) - ¥19,999 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-pro" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac Studio (M2 Max) - ¥15,999 <a href="https://www.apple.com.cn/shop/buy-mac/mac-studio" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
                         <li style="padding: 8px 0;"><strong>✅ 推荐:</strong> MacBook Pro 16" (M4 Pro)</li>
                     </ul>
                 </div>
                 <div class="tier-card">
                     <h3>🔴 旗舰级 (¥25,000+)</h3>
                     <ul style="list-style: none; margin-top: 15px;">
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 16" (M4 Max) - ¥28,999</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac Studio (M2 Ultra) - ¥31,999</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac Pro (M2 Ultra) - ¥54,999</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• MacBook Pro 16" (M4 Max) - ¥28,999 <a href="https://www.apple.com.cn/shop/buy-mac/macbook-pro" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac Studio (M2 Ultra) - ¥31,999 <a href="https://www.apple.com.cn/shop/buy-mac/mac-studio" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">• Mac Pro (M2 Ultra) - ¥54,999 <a href="https://www.apple.com.cn/shop/buy-mac/mac-pro" target="_blank" style="color: #4da6ff;">购买 ↗</a></li>
                         <li style="padding: 8px 0;"><strong>✅ 推荐:</strong> MacBook Pro 16" (M4 Max)</li>
                     </ul>
                 </div>
@@ -772,8 +669,9 @@
         </div>
 
         <footer>
-            <p>📊 数据来源：Apple 中国官网 | 调研时间：2026-03-10</p>
+            <p>📊 数据来源：<a href="https://www.apple.com.cn/" target="_blank" style="color: #0071e3;">Apple 中国官网</a> | 调研时间：2026-03-10</p>
             <p style="margin-top: 10px;">本报告仅供参考，具体配置和价格以 Apple 官网为准</p>
+            <p style="margin-top: 10px;">🔗 GitHub 仓库：<a href="https://github.com/Gibo-Chun/Resarch_Report" target="_blank" style="color: #0071e3;">Gibo-Chun/Resarch_Report</a></p>
         </footer>
     </div>
 </body>
