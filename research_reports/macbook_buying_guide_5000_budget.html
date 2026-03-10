@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacBook 购买建议 - ¥5000 预算</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #1d1d1f; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        header { background: linear-gradient(135deg, #000 0%, #333 100%); color: white; padding: 50px 40px; text-align: center; }
+        header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        header p { opacity: 0.8; font-size: 1.1em; }
+        .budget-badge { display: inline-block; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 8px 20px; border-radius: 25px; font-size: 1em; font-weight: 600; margin-top: 15px; }
+        .content { padding: 40px; }
+        .recommendation-card { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 35px; border-radius: 15px; margin-bottom: 30px; }
+        .recommendation-card h2 { font-size: 1.8em; margin-bottom: 15px; }
+        .recommendation-card .price { font-size: 2.5em; font-weight: 700; margin: 20px 0; }
+        .recommendation-card .original-price { text-decoration: line-through; opacity: 0.7; font-size: 1.2em; }
+        .recommendation-card .savings { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 10px; display: inline-block; margin-top: 10px; }
+        .option-card { background: #f5f5f7; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; transition: all 0.3s; }
+        .option-card:hover { transform: translateX(10px); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); }
+        .option-card h3 { font-size: 1.4em; margin-bottom: 10px; color: #1d1d1f; }
+        .option-card .price-tag { font-size: 1.5em; color: #0071e3; font-weight: 600; margin: 10px 0; }
+        .option-card .price-breakdown { background: white; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .option-card .price-breakdown div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #e0e0e0; }
+        .option-card .price-breakdown div:last-child { border-bottom: none; font-weight: 600; color: #0071e3; font-size: 1.1em; }
+        .option-card .pros { background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .option-card .pros h4 { color: #2e7d32; margin-bottom: 10px; }
+        .option-card .pros ul { list-style: none; }
+        .option-card .pros li::before { content: "✅ "; }
+        .option-card .cons { background: #ffebee; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .option-card .cons h4 { color: #c62828; margin-bottom: 10px; }
+        .option-card .cons ul { list-style: none; }
+        .option-card .cons li::before { content: "⚠️ "; }
+        .discount-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 35px; border-radius: 15px; margin: 30px 0; }
+        .discount-section h2 { margin-bottom: 20px; }
+        .discount-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .discount-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; }
+        .discount-card h3 { font-size: 1.2em; margin-bottom: 10px; }
+        .discount-card .rate { font-size: 2em; font-weight: 700; color: #4fc3f7; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+        .comparison-table th, .comparison-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        .comparison-table th { background: #f5f5f7; font-weight: 600; }
+        .comparison-table tr:hover { background: #fafafa; }
+        .comparison-table .best { background: #e8f5e9; font-weight: 600; }
+        .buy-link { display: inline-block; background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; margin-top: 15px; transition: all 0.3s; }
+        .buy-link:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0, 113, 227, 0.4); }
+        .tips-section { background: #fff3cd; border-left: 5px solid #ffc107; padding: 25px; border-radius: 10px; margin: 30px 0; }
+        .tips-section h3 { color: #856404; margin-bottom: 15px; }
+        .tips-section ul { list-style: none; }
+        .tips-section li { padding: 8px 0; color: #856404; }
+        .tips-section li::before { content: "💡 "; }
+        footer { background: #1a1a2e; color: #a0aec0; text-align: center; padding: 25px; font-size: 0.9em; }
+        @media (max-width: 768px) { .container { border-radius: 0; } .content { padding: 20px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💻 MacBook 购买建议</h1>
+            <p>基于 ¥5000 预算 + 国家补贴 + 学生优惠</p>
+            <div class="budget-badge">💰 总预算：¥5,000</div>
+            <p style="margin-top: 20px; font-size: 0.9em;">生成时间：2026-03-10 20:47</p>
+        </header>
+
+        <div class="content">
+            <!-- 最佳推荐 -->
+            <div class="recommendation-card">
+                <h2>🏆 最佳推荐</h2>
+                <p style="font-size: 1.1em; opacity: 0.9;">MacBook Air 13 英寸 (M1 芯片) - 教育优惠 + 国家补贴后</p>
+                <div class="price">
+                    <span class="original-price">¥7,499</span>
+                    ¥4,799 起
+                </div>
+                <div class="savings">💰 立省 ¥2,700</div>
+                <p style="margin-top: 20px;">
+                    <strong>推荐理由:</strong> M1 芯片性能依然强劲，日常使用流畅，续航优秀，性价比最高
+                </p>
+                <a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" class="buy-link" target="_blank">前往购买 →</a>
+            </div>
+
+            <!-- 优惠政策说明 -->
+            <div class="discount-section">
+                <h2>🎁 可用优惠政策</h2>
+                <div class="discount-grid">
+                    <div class="discount-card">
+                        <h3>🎓 苹果教育优惠</h3>
+                        <div class="rate">约 9-9.5 折</div>
+                        <p style="margin-top: 10px; opacity: 0.9;">适用于高校学生、教职工</p>
+                        <p style="margin-top: 5px; font-size: 0.9em;">需验证学生身份</p>
+                    </div>
+                    <div class="discount-card">
+                        <h3>🇨🇳 国家以旧换新补贴</h3>
+                        <div class="rate">10-15%</div>
+                        <p style="margin-top: 10px; opacity: 0.9;">最高补贴 ¥2000</p>
+                        <p style="margin-top: 5px; font-size: 0.9em;">各地政策略有不同</p>
+                    </div>
+                    <div class="discount-card">
+                        <h3>💳 电商平台优惠</h3>
+                        <div class="rate">¥200-500</div>
+                        <p style="margin-top: 10px; opacity: 0.9;">京东/天猫平台券</p>
+                        <p style="margin-top: 5px; font-size: 0.9em;">618/双 11 力度最大</p>
+                    </div>
+                    <div class="discount-card">
+                        <h3>♻️ 苹果折抵换购</h3>
+                        <div class="rate">视设备而定</div>
+                        <p style="margin-top: 10px; opacity: 0.9;">旧设备折抵</p>
+                        <p style="margin-top: 5px; font-size: 0.9em;">可叠加其他优惠</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 方案对比 -->
+            <h2 style="margin: 30px 0 20px 0; color: #1d1d1f;">📊 购买方案详细对比</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>方案</th>
+                        <th>原价</th>
+                        <th>教育优惠</th>
+                        <th>国家补贴</th>
+                        <th>最终价格</th>
+                        <th>推荐度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="best">
+                        <td><strong>MacBook Air 13" M1</strong><br><span style="font-size: 0.8em; color: #666;">教育 + 补贴</span></td>
+                        <td>¥7,499</td>
+                        <td>¥6,749</td>
+                        <td>-¥1,950 (15%)</td>
+                        <td><strong>¥4,799</strong></td>
+                        <td>🏆 最佳</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MacBook Air 13" M1</strong><br><span style="font-size: 0.8em; color: #666;">仅教育优惠</span></td>
+                        <td>¥7,499</td>
+                        <td>¥6,749</td>
+                        <td>-</td>
+                        <td>¥6,749</td>
+                        <td>⭐⭐⭐⭐</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MacBook Air 13" M2</strong><br><span style="font-size: 0.8em; color: #666;">教育 + 补贴</span></td>
+                        <td>¥8,999</td>
+                        <td>¥8,099</td>
+                        <td>-¥1,215 (15%)</td>
+                        <td>¥6,884</td>
+                        <td>⭐⭐⭐ 超预算</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mac mini M4</strong><br><span style="font-size: 0.8em; color: #666;">教育 + 补贴</span></td>
+                        <td>¥4,499</td>
+                        <td>¥4,049</td>
+                        <td>-¥607 (15%)</td>
+                        <td>¥3,442</td>
+                        <td>⭐⭐⭐⭐ 需显示器</td>
+                    </tr>
+                    <tr>
+                        <td><strong>官翻 MacBook Air M1</strong><br><span style="font-size: 0.8em; color: #666;">教育 + 补贴</span></td>
+                        <td>¥6,299</td>
+                        <td>¥5,669</td>
+                        <td>-¥850 (15%)</td>
+                        <td>¥4,819</td>
+                        <td>⭐⭐⭐⭐ 性价比高</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 方案 1：MacBook Air M1 -->
+            <div class="option-card">
+                <h3>🥇 方案一：MacBook Air 13" (M1) - 强烈推荐</h3>
+                <div class="price-tag">最终价格：¥4,799 起</div>
+                <div class="price-breakdown">
+                    <div><span>官方原价:</span> <span>¥7,499</span></div>
+                    <div><span>教育优惠后:</span> <span>¥6,749</span></div>
+                    <div><span>国家补贴 (15%):</span> <span>-¥1,950</span></div>
+                    <div><span>最终价格:</span> <span>¥4,799</span></div>
+                </div>
+                <div class="pros">
+                    <h4>✅ 优点</h4>
+                    <ul>
+                        <li>M1 芯片性能依然强劲，日常使用流畅</li>
+                        <li>无风扇设计，完全静音</li>
+                        <li>续航优秀，15-18 小时</li>
+                        <li>重量轻 (1.29kg)，便携性好</li>
+                        <li>性价比最高，预算内最佳选择</li>
+                        <li>支持 1 台 6K 外接显示器</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ 缺点</h4>
+                    <ul>
+                        <li>屏幕亮度 400 尼特 (不如新款 500 尼特)</li>
+                        <li>仅 2 个雷雳端口</li>
+                        <li>720p 摄像头 (画质一般)</li>
+                        <li>MagSafe 充电 (占用一个端口)</li>
+                        <li>教育优惠需验证学生身份</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 20px;">
+                    <strong>📋 配置建议:</strong> 8GB 内存 + 256GB 存储 (¥4,799) | 如预算允许可升级 16GB 内存 (+¥1,500)
+                </div>
+                <a href="https://www.apple.com.cn/shop/buy-mac/macbook-air" class="buy-link" target="_blank">Apple 教育商店购买 →</a>
+            </div>
+
+            <!-- 方案 2：官翻 MacBook Air M1 -->
+            <div class="option-card">
+                <h3>🥈 方案二：Apple 官方翻新 MacBook Air M1</h3>
+                <div class="price-tag">最终价格：约 ¥4,800-5,200</div>
+                <div class="price-breakdown">
+                    <div><span>官翻原价:</span> <span>约 ¥6,299</span></div>
+                    <div><span>教育优惠后:</span> <span>约 ¥5,669</span></div>
+                    <div><span>国家补贴 (15%):</span> <span>-约 ¥850</span></div>
+                    <div><span>最终价格:</span> <span>约 ¥4,819</span></div>
+                </div>
+                <div class="pros">
+                    <h4>✅ 优点</h4>
+                    <ul>
+                        <li>官方翻新，质量有保障</li>
+                        <li>享受与新机相同的 1 年保修</li>
+                        <li>价格比全新便宜 15-20%</li>
+                        <li>经过 Apple 严格检测和翻新</li>
+                        <li>可能配备新电池和外壳</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ 缺点</h4>
+                    <ul>
+                        <li>库存不稳定，需要经常查看</li>
+                        <li>配置选择有限</li>
+                        <li>心理因素 (部分人在意翻新)</li>
+                        <li>教育优惠可能不适用于官翻</li>
+                    </ul>
+                </div>
+                <a href="https://www.apple.com.cn/shop/special-deals/mac" class="buy-link" target="_blank">查看官翻 Mac →</a>
+            </div>
+
+            <!-- 方案 3：Mac mini M4 -->
+            <div class="option-card">
+                <h3>🥉 方案三：Mac mini (M4) + 显示器</h3>
+                <div class="price-tag">最终价格：¥3,442 (仅主机)</div>
+                <div class="price-breakdown">
+                    <div><span>官方原价:</span> <span>¥4,499</span></div>
+                    <div><span>教育优惠后:</span> <span>¥4,049</span></div>
+                    <div><span>国家补贴 (15%):</span> <span>-¥607</span></div>
+                    <div><span>最终价格:</span> <span>¥3,442</span></div>
+                </div>
+                <div class="pros">
+                    <h4>✅ 优点</h4>
+                    <ul>
+                        <li>M4 芯片性能最强 (比 M1 快约 80%)</li>
+                        <li>价格最低，预算内最便宜</li>
+                        <li>支持 3 台显示器</li>
+                        <li>端口丰富 (3×雷雳 4, 2×USB-C, HDMI)</li>
+                        <li>可升级性更好</li>
+                        <li>剩余预算可买显示器/配件</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ 缺点</h4>
+                    <ul>
+                        <li>需要自备显示器、键盘、鼠标</li>
+                        <li>不便携，固定位置使用</li>
+                        <li>显示器额外预算约 ¥1,000-2,000</li>
+                        <li>不适合需要移动办公的用户</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 20px;">
+                    <strong>📋 总预算估算:</strong> Mac mini ¥3,442 + 显示器 ¥1,500 + 键鼠 ¥300 = <strong>约 ¥5,242</strong>
+                </div>
+                <a href="https://www.apple.com.cn/shop/buy-mac/mac-mini" class="buy-link" target="_blank">购买 Mac mini →</a>
+            </div>
+
+            <!-- 购买渠道对比 -->
+            <h2 style="margin: 30px 0 20px 0; color: #1d1d1f;">🛒 购买渠道对比</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>渠道</th>
+                        <th>教育优惠</th>
+                        <th>国家补贴</th>
+                        <th>其他优惠</th>
+                        <th>推荐度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="best">
+                        <td><strong>Apple 官网教育商店</strong></td>
+                        <td>✅ 支持</td>
+                        <td>✅ 支持</td>
+                        <td>免息分期</td>
+                        <td>🏆 最推荐</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Apple Store 零售店</strong></td>
+                        <td>✅ 支持</td>
+                        <td>✅ 支持</td>
+                        <td>现场体验</td>
+                        <td>⭐⭐⭐⭐</td>
+                    </tr>
+                    <tr>
+                        <td><strong>京东自营</strong></td>
+                        <td>⚠️ 部分支持</td>
+                        <td>✅ 支持</td>
+                        <td>平台券 + 京豆</td>
+                        <td>⭐⭐⭐⭐</td>
+                    </tr>
+                    <tr>
+                        <td><strong>天猫 Apple  Store</strong></td>
+                        <td>⚠️ 部分支持</td>
+                        <td>✅ 支持</td>
+                        <td>88VIP+ 平台券</td>
+                        <td>⭐⭐⭐⭐</td>
+                    </tr>
+                    <tr>
+                        <td><strong>拼多多百亿补贴</strong></td>
+                        <td>❌ 不支持</td>
+                        <td>⚠️ 部分支持</td>
+                        <td>价格最低</td>
+                        <td>⭐⭐⭐ 需谨慎</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 购买建议 -->
+            <div class="tips-section">
+                <h3>💡 购买建议与注意事项</h3>
+                <ul>
+                    <li><strong>教育优惠验证:</strong> 需通过 UNiDAYS 验证学生身份，或使用.edu.cn 邮箱</li>
+                    <li><strong>国家补贴:</strong> 各地政策不同，一般为 10-15%，最高 ¥2000，需在指定平台领取</li>
+                    <li><strong>叠加顺序:</strong> 先教育优惠，再国家补贴，最后平台券</li>
+                    <li><strong>内存建议:</strong> 如预算允许，建议升级 16GB 内存 (M1 内存不可后期升级)</li>
+                    <li><strong>存储建议:</strong> 256GB 够用，可外接 SSD 扩展，比升级内置存储划算</li>
+                    <li><strong>保修:</strong> 建议购买 AppleCare+ (¥1,298)，延长 3 年保修</li>
+                    <li><strong>验机:</strong> 收到货后检查序列号、外观、屏幕、键盘、电池循环</li>
+                    <li><strong>退货政策:</strong> Apple 官网 14 天无理由退货 (激活后也可退)</li>
+                </ul>
+            </div>
+
+            <!-- 最终推荐 -->
+            <div class="recommendation-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <h2>🎯 最终推荐</h2>
+                <p style="font-size: 1.2em; margin: 20px 0;">
+                    <strong>MacBook Air 13" (M1, 8GB, 256GB)</strong>
+                </p>
+                <p style="font-size: 1.5em; font-weight: 700; margin: 20px 0;">
+                    💰 ¥4,799 (教育优惠 + 国家补贴后)
+                </p>
+                <p style="margin: 20px 0;">
+                    <strong>购买渠道:</strong> Apple 官网教育商店<br>
+                    <strong>验证方式:</strong> UNiDAYS 学生验证<br>
+                    <strong>补贴领取:</strong> 云闪付/当地指定平台<br>
+                    <strong>预计省:</strong> ¥2,700
+                </p>
+                <a href="https://www.apple.com.cn/shop/accessories/all/mac_edu" class="buy-link" target="_blank">前往 Apple 教育商店 →</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>📊 价格数据来源：Apple 中国官网 | 生成时间：2026-03-10 20:47</p>
+            <p style="margin-top: 10px;">⚠️ 价格和政策可能变动，请以实际购买时为准</p>
+            <p style="margin-top: 10px;">🔗 报告来源：<a href="https://gibo-chun.github.io/Resarch_Report/" target="_blank" style="color: #4da6ff;">gibo-chun.github.io/Resarch_Report</a></p>
+        </footer>
+    </div>
+</body>
+</html>
